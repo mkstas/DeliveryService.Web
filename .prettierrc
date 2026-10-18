@@ -5,20 +5,12 @@
   "endOfLine": "crlf",
   "singleQuote": true,
   "jsxSingleQuote": true,
-  "printWidth": 100,
+  "printWidth": 120,
   "tabWidth": 2,
   "semi": true,
   "trailingComma": "all",
   "plugins": ["prettier-plugin-tailwindcss", "@trivago/prettier-plugin-sort-imports"],
-  "importOrder": [
-    "^react$",
-    "^[a-zA-Z]",
-    "^@[^/]+/.+$",
-    "^@/common/(.*)$",
-    "^@/modules/(.*)$",
-    "^\\.\\./",
-    "^\\./"
-  ],
+  "importOrder": ["^react$", "^[a-zA-Z]", "^@[^/]+/.+$", "^@/common/(.*)$", "^@/modules/(.*)$", "^\\.\\./", "^\\./"],
   "importOrderSortSpecifiers": true,
   "importOrderCaseInsensitive": true
 }
