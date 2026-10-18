@@ -2,9 +2,8 @@
 
 import { FC } from 'react';
 import { KeyRoundIcon, MailIcon, UserIcon } from 'lucide-react';
-import { Controller, useForm } from 'react-hook-form';
-import * as z from 'zod';
-import { zodResolver } from '@hookform/resolvers/zod';
+import { z } from 'zod';
+import { useForm } from '@tanstack/react-form';
 import {
   Button,
   Field,
@@ -16,92 +15,127 @@ import {
   InputGroupInput,
 } from '@/common/components';
 
-const formSchema = z.object({
+const registerFormSchema = z.object({
   name: z.string().nonempty('Имя не может быть пустым').max(256, 'Максимальная длина 256 символа'),
   emailAddress: z.email('Неверный формат эл. почты').max(256, 'Максимальная длина 256 символа'),
   password: z.string().min(8, 'Минимальная длина 8 символов').max(32, 'Максимальная длина 32 символа'),
 });
 
 export const RegisterForm: FC = () => {
-  const form = useForm<z.infer<typeof formSchema>>({
-    resolver: zodResolver(formSchema),
+  const form = useForm({
     defaultValues: {
       name: '',
       emailAddress: '',
       password: '',
+    } as z.infer<typeof registerFormSchema>,
+    validators: {
+      onChange: registerFormSchema,
     },
-    mode: 'onChange',
+    onSubmit: ({ value }) => {
+      console.log(value);
+    },
   });
 
-  const onSubmit = (data: z.infer<typeof formSchema>) => {
-    console.log(data);
-  };
-
   return (
-    <form onSubmit={form.handleSubmit(onSubmit)}>
+    <form
+      onSubmit={e => {
+        e.preventDefault();
+        e.stopPropagation();
+        form.handleSubmit();
+      }}
+    >
       <FieldGroup>
-        <Controller
-          name='name'
-          control={form.control}
-          render={({ field, fieldState }) => (
-            <Field>
-              <FieldLabel htmlFor='name'>Имя пользователя</FieldLabel>
-              <InputGroup>
-                <InputGroupInput {...field} id='name' aria-invalid={fieldState.invalid} placeholder='Хосэ' />
-                <InputGroupAddon>
-                  <UserIcon />
-                </InputGroupAddon>
-              </InputGroup>
-              {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
-            </Field>
+        <form.Field name='name'>
+          {field => {
+            const isError =
+              field.state.meta.errors.length > 0 && (field.state.meta.isTouched || form.state.isSubmitted);
+
+            return (
+              <Field>
+                <FieldLabel htmlFor='name'>Имя пользователя</FieldLabel>
+                <InputGroup>
+                  <InputGroupInput
+                    id='name'
+                    type='text'
+                    aria-invalid={isError}
+                    placeholder='Александр'
+                    value={field.state.value}
+                    onChange={e => field.handleChange(e.target.value)}
+                    onBlur={field.handleBlur}
+                  />
+                  <InputGroupAddon>
+                    <UserIcon />
+                  </InputGroupAddon>
+                </InputGroup>
+                {isError && <FieldError errors={field.state.meta.errors} />}
+              </Field>
+            );
+          }}
+        </form.Field>
+
+        <form.Field name='emailAddress'>
+          {field => {
+            const isError =
+              field.state.meta.errors.length > 0 && (field.state.meta.isTouched || form.state.isSubmitted);
+
+            return (
+              <Field>
+                <FieldLabel htmlFor='email_address'>Адрес электронной почты</FieldLabel>
+                <InputGroup>
+                  <InputGroupInput
+                    id='email_address'
+                    type='email'
+                    aria-invalid={isError}
+                    placeholder='example@mail.com'
+                    value={field.state.value}
+                    onChange={e => field.handleChange(e.target.value)}
+                    onBlur={field.handleBlur}
+                  />
+                  <InputGroupAddon>
+                    <MailIcon />
+                  </InputGroupAddon>
+                </InputGroup>
+                {isError && <FieldError errors={field.state.meta.errors} />}
+              </Field>
+            );
+          }}
+        </form.Field>
+
+        <form.Field name='password'>
+          {field => {
+            const isError =
+              field.state.meta.errors.length > 0 && (field.state.meta.isTouched || form.state.isSubmitted);
+
+            return (
+              <Field>
+                <FieldLabel htmlFor='password'>Пароль</FieldLabel>
+                <InputGroup>
+                  <InputGroupInput
+                    id='password'
+                    type='password'
+                    aria-invalid={isError}
+                    placeholder='••••••••'
+                    value={field.state.value}
+                    onChange={e => field.handleChange(e.target.value)}
+                    onBlur={field.handleBlur}
+                  />
+                  <InputGroupAddon>
+                    <KeyRoundIcon />
+                  </InputGroupAddon>
+                </InputGroup>
+                {isError && <FieldError errors={field.state.meta.errors} />}
+              </Field>
+            );
+          }}
+        </form.Field>
+
+        <form.Subscribe selector={state => [state.isSubmitting]}>
+          {([isSubmitting]) => (
+            <Button type='submit' disabled={isSubmitting} size='lg' className='w-full'>
+              Войти
+            </Button>
           )}
-        />
-        <Controller
-          name='emailAddress'
-          control={form.control}
-          render={({ field, fieldState }) => (
-            <Field>
-              <FieldLabel htmlFor='email_address'>Адрес электронной почты</FieldLabel>
-              <InputGroup>
-                <InputGroupInput
-                  {...field}
-                  id='email_address'
-                  aria-invalid={fieldState.invalid}
-                  placeholder='example@mail.com'
-                />
-                <InputGroupAddon>
-                  <MailIcon />
-                </InputGroupAddon>
-              </InputGroup>
-              {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
-            </Field>
-          )}
-        />
-        <Controller
-          name='password'
-          control={form.control}
-          render={({ field, fieldState }) => (
-            <Field>
-              <FieldLabel htmlFor='password'>Пароль</FieldLabel>
-              <InputGroup>
-                <InputGroupInput
-                  {...field}
-                  id='password'
-                  type='password'
-                  aria-invalid={fieldState.invalid}
-                  placeholder='••••••••'
-                />
-                <InputGroupAddon>
-                  <KeyRoundIcon />
-                </InputGroupAddon>
-              </InputGroup>
-              {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
-            </Field>
-          )}
-        />
-        <Button type='submit' size='lg' className='w-full'>
-          Зарегистрироваться
-        </Button>
+        </form.Subscribe>
       </FieldGroup>
     </form>
   );
