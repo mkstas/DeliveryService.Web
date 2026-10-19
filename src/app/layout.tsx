@@ -1,4 +1,5 @@
 import { Inter } from 'next/font/google';
+import { TooltipProvider } from '@/common/components';
 import { cn } from '@/common/lib/utils';
 import { QueryProvider } from '@/common/providers';
 import './globals.css';
@@ -9,7 +10,9 @@ export default function RootLayout({ children }: LayoutProps<'/'>) {
   return (
     <html className={cn('font-sans', 'font-sans', inter.variable)}>
       <body className='bg-accent'>
-        <QueryProvider>{children}</QueryProvider>
+        <QueryProvider>
+          <TooltipProvider>{children}</TooltipProvider>
+        </QueryProvider>
       </body>
     </html>
   );
