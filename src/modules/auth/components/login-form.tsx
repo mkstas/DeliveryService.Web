@@ -2,9 +2,10 @@
 
 import { FC } from 'react';
 import { KeyRoundIcon, MailIcon } from 'lucide-react';
+import { useRouter } from 'next/navigation';
 import { z } from 'zod';
 import { useForm } from '@tanstack/react-form';
-import { useMutation } from '@tanstack/react-query';
+import { ApiError } from '@/common/api';
 import {
   Button,
   Field,
@@ -15,6 +16,8 @@ import {
   InputGroupAddon,
   InputGroupInput,
 } from '@/common/components';
+import { ROUTES } from '@/common/config';
+import { useLogin } from '../hooks/useLogin';
 
 const loginFormSchema = z.object({
   emailAddress: z.email('Неверный формат эл. почты').max(256, 'Максимальная длина 256 символа'),
@@ -23,23 +26,23 @@ const loginFormSchema = z.object({
 
 type LoginFormSchema = z.infer<typeof loginFormSchema>;
 
+const getErrorMessage = (error: unknown): string => {
+  if (error instanceof ApiError) {
+    if (error.status === 401) {
+      return 'Неверный логин или пароль';
+    }
+
+    if (error.serverMessage) {
+      return error.serverMessage;
+    }
+  }
+
+  return 'Ошибка входа, попробуйте снова позже';
+};
+
 export const LoginForm: FC = () => {
-  const mutation = useMutation({
-    mutationFn: (data: LoginFormSchema) => {
-      return fetch('http://localhost:5000/api/v1/auth/login', {
-        method: 'POST',
-        body: JSON.stringify(data),
-        headers: { 'Content-type': 'application/json; charset=UTF-8' },
-        credentials: 'include',
-      });
-    },
-    onSuccess: res => {
-      console.log(res.status);
-    },
-    onError: res => {
-      alert(res.message);
-    },
-  });
+  const router = useRouter();
+  const login = useLogin();
 
   const form = useForm({
     defaultValues: {
@@ -49,8 +52,20 @@ export const LoginForm: FC = () => {
     validators: {
       onChange: loginFormSchema,
     },
-    onSubmit: ({ value }) => {
-      mutation.mutate(value);
+    onSubmit: async ({ value }) => {
+      form.setFieldMeta('password', prev => ({ ...prev, errorMap: { ...prev.errorMap, onServer: undefined } }));
+
+      try {
+        await login.mutateAsync(value);
+        router.push(ROUTES.STORE);
+      } catch (error) {
+        const message = getErrorMessage(error);
+
+        form.setFieldMeta('password', prev => ({
+          ...prev,
+          errorMap: { ...prev.errorMap, onServer: [{ message }] },
+        }));
+      }
     },
   });
 
@@ -91,7 +106,17 @@ export const LoginForm: FC = () => {
           }}
         </form.Field>
 
-        <form.Field name='password'>
+        <form.Field
+          name='password'
+          listeners={{
+            onChange: () => {
+              form.setFieldMeta('password', prev => ({
+                ...prev,
+                errorMap: { ...prev.errorMap, onServer: undefined },
+              }));
+            },
+          }}
+        >
           {field => {
             const isError =
               field.state.meta.errors.length > 0 && (field.state.meta.isTouched || form.state.isSubmitted);

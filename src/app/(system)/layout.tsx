@@ -1,7 +1,7 @@
 import { SidebarInset, SidebarProvider, SidebarTrigger } from '@/common/components';
 import { SystemSidebar } from '@/modules/dashboard';
 
-export default function RootLayout({ children }: LayoutProps<'/'>) {
+export default function SystemLayout({ children }: LayoutProps<'/'>) {
   return (
     <SidebarProvider>
       <SystemSidebar />

@@ -2,9 +2,10 @@
 
 import { FC } from 'react';
 import { KeyRoundIcon, MailIcon, UserIcon } from 'lucide-react';
+import { useRouter } from 'next/navigation';
 import { z } from 'zod';
 import { useForm } from '@tanstack/react-form';
-import { useMutation } from '@tanstack/react-query';
+import { ApiError } from '@/common/api';
 import {
   Button,
   Field,
@@ -15,6 +16,9 @@ import {
   InputGroupAddon,
   InputGroupInput,
 } from '@/common/components';
+import { ROUTES } from '@/common/config';
+import { useLogin } from '../hooks/useLogin';
+import { useRegister } from '../hooks/useRegister';
 
 const registerFormSchema = z.object({
   name: z.string().nonempty('Имя не может быть пустым').max(256, 'Максимальная длина 256 символа'),
@@ -24,23 +28,24 @@ const registerFormSchema = z.object({
 
 type RegisterFormSchema = z.infer<typeof registerFormSchema>;
 
+const getErrorMessage = (error: unknown): string => {
+  if (error instanceof ApiError) {
+    if (error.status === 409) {
+      return 'Такой адрес эл. почты уже занят';
+    }
+
+    if (error.serverMessage) {
+      return error.serverMessage;
+    }
+  }
+
+  return 'Ошибка регистрации, попробуйте снова позже';
+};
+
 export const RegisterForm: FC = () => {
-  const mutation = useMutation({
-    mutationFn: (data: RegisterFormSchema) => {
-      return fetch('http://localhost:5000/api/v1/auth/register', {
-        method: 'POST',
-        body: JSON.stringify(data),
-        headers: { 'Content-type': 'application/json; charset=UTF-8' },
-        credentials: 'include',
-      });
-    },
-    onSuccess: res => {
-      console.log(res.status);
-    },
-    onError: res => {
-      alert(res.message);
-    },
-  });
+  const router = useRouter();
+  const register = useRegister();
+  const login = useLogin();
 
   const form = useForm({
     defaultValues: {
@@ -51,8 +56,35 @@ export const RegisterForm: FC = () => {
     validators: {
       onChange: registerFormSchema,
     },
-    onSubmit: ({ value }) => {
-      mutation.mutate(value);
+    onSubmit: async ({ value }) => {
+      form.setFieldMeta('emailAddress', prev => ({ ...prev, errorMap: { ...prev.errorMap, onServer: undefined } }));
+      form.setFieldMeta('password', prev => ({ ...prev, errorMap: { ...prev.errorMap, onServer: undefined } }));
+
+      try {
+        await register.mutateAsync(value);
+      } catch (error) {
+        const field = error instanceof ApiError && error.status === 409 ? 'emailAddress' : 'password';
+        const message = getErrorMessage(error);
+
+        form.setFieldMeta(field, prev => ({
+          ...prev,
+          errorMap: { ...prev.errorMap, onServer: [{ message }] },
+        }));
+
+        return;
+      }
+
+      try {
+        await login.mutateAsync({ emailAddress: value.emailAddress, password: value.password });
+        router.push(ROUTES.STORE);
+      } catch (error) {
+        const message = getErrorMessage(error);
+
+        form.setFieldMeta('password', prev => ({
+          ...prev,
+          errorMap: { ...prev.errorMap, onServer: [{ message }] },
+        }));
+      }
     },
   });
 
@@ -93,7 +125,17 @@ export const RegisterForm: FC = () => {
           }}
         </form.Field>
 
-        <form.Field name='emailAddress'>
+        <form.Field
+          name='emailAddress'
+          listeners={{
+            onChange: () => {
+              form.setFieldMeta('emailAddress', prev => ({
+                ...prev,
+                errorMap: { ...prev.errorMap, onServer: undefined },
+              }));
+            },
+          }}
+        >
           {field => {
             const isError =
               field.state.meta.errors.length > 0 && (field.state.meta.isTouched || form.state.isSubmitted);
@@ -121,7 +163,17 @@ export const RegisterForm: FC = () => {
           }}
         </form.Field>
 
-        <form.Field name='password'>
+        <form.Field
+          name='password'
+          listeners={{
+            onChange: () => {
+              form.setFieldMeta('password', prev => ({
+                ...prev,
+                errorMap: { ...prev.errorMap, onServer: undefined },
+              }));
+            },
+          }}
+        >
           {field => {
             const isError =
               field.state.meta.errors.length > 0 && (field.state.meta.isTouched || form.state.isSubmitted);
@@ -152,7 +204,7 @@ export const RegisterForm: FC = () => {
         <form.Subscribe selector={state => [state.isSubmitting]}>
           {([isSubmitting]) => (
             <Button type='submit' disabled={isSubmitting} size='lg' className='w-full'>
-              Войти
+              Зарегистрироваться
             </Button>
           )}
         </form.Subscribe>

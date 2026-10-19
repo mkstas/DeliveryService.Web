@@ -8,7 +8,7 @@ const inter = Inter({ subsets: ['latin'], variable: '--font-sans' });
 
 export default function RootLayout({ children }: LayoutProps<'/'>) {
   return (
-    <html className={cn('font-sans', 'font-sans', inter.variable)}>
+    <html className={cn('font-sans', inter.variable)}>
       <body className='bg-accent'>
         <QueryProvider>
           <TooltipProvider>{children}</TooltipProvider>

@@ -2,17 +2,17 @@
 
 import * as React from 'react';
 import { cva, type VariantProps } from 'class-variance-authority';
-import { cn } from 'cn';
 import { PanelLeftIcon } from 'lucide-react';
 import { mergeProps } from '@base-ui/react/merge-props';
 import { useRender } from '@base-ui/react/use-render';
-import { Button } from '@/common/components/src/button';
-import { Input } from '@/common/components/src/input';
-import { Separator } from '@/common/components/src/separator';
-import { Sheet, SheetContent, SheetDescription, SheetHeader, SheetTitle } from '@/common/components/src/sheet';
-import { Skeleton } from '@/common/components/src/skeleton';
-import { Tooltip, TooltipContent, TooltipTrigger } from '@/common/components/src/tooltip';
+import { Button } from '@/common/components/button';
+import { Input } from '@/common/components/input';
+import { Separator } from '@/common/components/separator';
+import { Sheet, SheetContent, SheetDescription, SheetHeader, SheetTitle } from '@/common/components/sheet';
+import { Skeleton } from '@/common/components/skeleton';
+import { Tooltip, TooltipContent, TooltipTrigger } from '@/common/components/tooltip';
 import { useIsMobile } from '@/common/hooks/use-mobile';
+import { cn } from '@/common/lib/utils';
 
 const SIDEBAR_COOKIE_NAME = 'sidebar_state';
 const SIDEBAR_COOKIE_MAX_AGE = 60 * 60 * 24 * 7;
