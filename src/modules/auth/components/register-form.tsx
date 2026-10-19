@@ -4,6 +4,7 @@ import { FC } from 'react';
 import { KeyRoundIcon, MailIcon, UserIcon } from 'lucide-react';
 import { z } from 'zod';
 import { useForm } from '@tanstack/react-form';
+import { useMutation } from '@tanstack/react-query';
 import {
   Button,
   Field,
@@ -21,18 +22,37 @@ const registerFormSchema = z.object({
   password: z.string().min(8, 'Минимальная длина 8 символов').max(32, 'Максимальная длина 32 символа'),
 });
 
+type RegisterFormSchema = z.infer<typeof registerFormSchema>;
+
 export const RegisterForm: FC = () => {
+  const mutation = useMutation({
+    mutationFn: (data: RegisterFormSchema) => {
+      return fetch('http://localhost:5000/api/v1/auth/register', {
+        method: 'POST',
+        body: JSON.stringify(data),
+        headers: { 'Content-type': 'application/json; charset=UTF-8' },
+        credentials: 'include',
+      });
+    },
+    onSuccess: res => {
+      console.log(res.status);
+    },
+    onError: res => {
+      alert(res.message);
+    },
+  });
+
   const form = useForm({
     defaultValues: {
       name: '',
       emailAddress: '',
       password: '',
-    } as z.infer<typeof registerFormSchema>,
+    } as RegisterFormSchema,
     validators: {
       onChange: registerFormSchema,
     },
     onSubmit: ({ value }) => {
-      console.log(value);
+      mutation.mutate(value);
     },
   });
 
