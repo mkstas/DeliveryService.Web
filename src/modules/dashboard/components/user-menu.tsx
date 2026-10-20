@@ -2,7 +2,6 @@
 
 import { FC } from 'react';
 import { ChevronsUpDownIcon, LogOutIcon, UserIcon } from 'lucide-react';
-import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import {
   Avatar,
@@ -38,18 +37,18 @@ export const UserMenu: FC = () => {
               <Skeleton className='h-4 w-28' />
             </div>
           </div>
-        ) : user ? (
+        ) : (
           <DropdownMenu>
             <DropdownMenuTrigger render={<SidebarMenuButton size='lg' className='rounded-2xl' />}>
               <Avatar>
-                <AvatarImage src={`${API_URL}/static/${user.imageUrl}`} alt={`Avatar ${user.name}`} />
+                <AvatarImage src={`${API_URL}/static/${user?.imageUrl}`} alt={`Avatar ${user?.name}`} />
                 <AvatarFallback>
                   <UserIcon />
                 </AvatarFallback>
               </Avatar>
               <div className='grid'>
-                <span className='font-medium'>{user.name}</span>
-                <span className='text-xs'>{user.emailAddress}</span>
+                <span className='font-medium'>{user?.name}</span>
+                <span className='text-xs'>{user?.emailAddress}</span>
               </div>
               <ChevronsUpDownIcon className='ml-auto' />
             </DropdownMenuTrigger>
@@ -69,11 +68,6 @@ export const UserMenu: FC = () => {
               </DropdownMenuItem>
             </DropdownMenuContent>
           </DropdownMenu>
-        ) : (
-          <SidebarMenuButton render={<Link href={ROUTES.LOGIN} />}>
-            <UserIcon />
-            <span>Войти</span>
-          </SidebarMenuButton>
         )}
       </SidebarMenuItem>
     </SidebarMenu>
