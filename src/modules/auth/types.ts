@@ -15,3 +15,12 @@ export type RegisterData = {
   emailAddress: string;
   password: string;
 };
+
+export type ConfirmData = {
+  code: string;
+  emailAddress: string;
+};
+
+export type ResendData = {
+  emailAddress: string;
+};

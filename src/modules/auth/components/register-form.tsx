@@ -45,7 +45,6 @@ const getErrorMessage = (error: unknown): string => {
 export const RegisterForm: FC = () => {
   const router = useRouter();
   const register = useRegister();
-  const login = useLogin();
 
   const form = useForm({
     defaultValues: {
@@ -62,6 +61,7 @@ export const RegisterForm: FC = () => {
 
       try {
         await register.mutateAsync(value);
+        router.push(`${ROUTES.CONFIRM}?emailAddress=${value.emailAddress}&password=${value.password}`);
       } catch (error) {
         const field = error instanceof ApiError && error.status === 409 ? 'emailAddress' : 'password';
         const message = getErrorMessage(error);
@@ -72,18 +72,6 @@ export const RegisterForm: FC = () => {
         }));
 
         return;
-      }
-
-      try {
-        await login.mutateAsync({ emailAddress: value.emailAddress, password: value.password });
-        router.push(ROUTES.STORE);
-      } catch (error) {
-        const message = getErrorMessage(error);
-
-        form.setFieldMeta('password', prev => ({
-          ...prev,
-          errorMap: { ...prev.errorMap, onServer: [{ message }] },
-        }));
       }
     },
   });
