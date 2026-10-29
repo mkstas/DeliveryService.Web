@@ -1,9 +1,7 @@
 import { FC } from 'react';
-import { DonutIcon, LogInIcon } from 'lucide-react';
+import { DonutIcon } from 'lucide-react';
 import Link from 'next/link';
-import { buttonVariants } from '@/common/components';
 import { ROUTES } from '@/common/config';
-import { cn } from '@/common/lib/utils';
 import { AuthActions } from './auth-actions';
 
 export const AppHeader: FC = () => {
