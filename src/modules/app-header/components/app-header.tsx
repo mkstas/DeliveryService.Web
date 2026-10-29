@@ -4,6 +4,7 @@ import Link from 'next/link';
 import { buttonVariants } from '@/common/components';
 import { ROUTES } from '@/common/config';
 import { cn } from '@/common/lib/utils';
+import { AuthActions } from './auth-actions';
 
 export const AppHeader: FC = () => {
   return (
@@ -18,10 +19,7 @@ export const AppHeader: FC = () => {
           </div>
         </Link>
         <div className='flex items-center'>
-          <Link href={ROUTES.LOGIN} className={cn(buttonVariants({ variant: 'outline' }))}>
-            <LogInIcon className='size-4' />
-            <span>Войти</span>
-          </Link>
+          <AuthActions />
         </div>
       </div>
     </header>
