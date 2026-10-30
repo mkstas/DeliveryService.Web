@@ -8,3 +8,16 @@ export type Role = {
   name: string;
   permissions: Permission[];
 };
+
+export type CreateRoleData = {
+  name: string;
+};
+
+export type UpdateRoleData = {
+  name: string;
+};
+
+export type RolePermissionData = {
+  roleId: string;
+  permissionId: string;
+};

@@ -12,7 +12,7 @@ import { Sheet, SheetContent, SheetDescription, SheetHeader, SheetTitle } from '
 import { Skeleton } from '@/common/components/skeleton';
 import { Tooltip, TooltipContent, TooltipTrigger } from '@/common/components/tooltip';
 import { useIsMobile } from '@/common/hooks/use-mobile';
-import { cn } from '@/common/lib/utils';
+import { cn } from 'cn';
 
 const SIDEBAR_COOKIE_NAME = 'sidebar_state';
 const SIDEBAR_COOKIE_MAX_AGE = 60 * 60 * 24 * 7;

@@ -17,7 +17,6 @@ import {
   InputGroupInput,
 } from '@/common/components';
 import { ROUTES } from '@/common/config';
-import { useLogin } from '../hooks/useLogin';
 import { useRegister } from '../hooks/useRegister';
 
 const registerFormSchema = z.object({
