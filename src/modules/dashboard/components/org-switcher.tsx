@@ -27,7 +27,7 @@ export const OrgSwitcher: FC = () => {
               <DonutIcon />
             </div>
             <div>
-              <span className='font-medium'>Delivery Service Inc</span>
+              <span className='font-medium'>Доставички Inc</span>
             </div>
             <ChevronsUpDownIcon className='ml-auto' />
           </DropdownMenuTrigger>

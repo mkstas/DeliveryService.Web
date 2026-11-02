@@ -1,5 +1,20 @@
 import { apiFetch } from '@/common/api';
-import { CreateRoleData, Permission, Role, RolePermissionData, UpdateRoleData } from './types';
+import {
+  CreateRoleData,
+  Permission,
+  Role,
+  RolePermissionData,
+  UpdateRoleData,
+  UserListItem,
+  UserRoleData,
+} from './types';
+
+export const getUsers = () => apiFetch<UserListItem[]>('/users');
+
+export const addUserRole = (data: UserRoleData) => apiFetch<void>('/users/roles', { method: 'POST', body: data });
+
+export const removeUserRole = ({ userId, roleId }: UserRoleData) =>
+  apiFetch<void>(`/users/${userId}/roles/${roleId}`, { method: 'DELETE' });
 
 export const getPermissions = () => apiFetch<Permission[]>('/permissions');
 

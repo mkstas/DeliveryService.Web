@@ -2,6 +2,7 @@
 
 import * as React from 'react';
 import { cva, type VariantProps } from 'class-variance-authority';
+import { cn } from 'cn';
 import { PanelLeftIcon } from 'lucide-react';
 import { mergeProps } from '@base-ui/react/merge-props';
 import { useRender } from '@base-ui/react/use-render';
@@ -12,7 +13,6 @@ import { Sheet, SheetContent, SheetDescription, SheetHeader, SheetTitle } from '
 import { Skeleton } from '@/common/components/skeleton';
 import { Tooltip, TooltipContent, TooltipTrigger } from '@/common/components/tooltip';
 import { useIsMobile } from '@/common/hooks/use-mobile';
-import { cn } from 'cn';
 
 const SIDEBAR_COOKIE_NAME = 'sidebar_state';
 const SIDEBAR_COOKIE_MAX_AGE = 60 * 60 * 24 * 7;

@@ -3,7 +3,7 @@
 import { FC } from 'react';
 import { cn } from 'cn';
 import { LoaderCircleIcon } from 'lucide-react';
-import { Switch } from '@/common/components';
+import { Checkbox } from '@/common/components';
 import { Permission } from '../types';
 
 type PermissionOptionProps = {
@@ -30,7 +30,7 @@ export const PermissionOption: FC<PermissionOptionProps> = ({ permission, checke
         isPending && 'pointer-events-none opacity-70',
       )}
     >
-      <Switch
+      <Checkbox
         checked={checked}
         disabled={isPending}
         onClick={event => event.stopPropagation()}

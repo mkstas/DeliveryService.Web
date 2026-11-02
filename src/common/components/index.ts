@@ -1,5 +1,7 @@
 export * from './accordion';
 export * from './avatar';
+export * from './badge';
+export * from './breadcrumb';
 export * from './button';
 export * from './card';
 export * from './checkbox';
@@ -9,6 +11,7 @@ export * from './field';
 export * from './input';
 export * from './input-group';
 export * from './label';
+export * from './popover';
 export * from './separator';
 export * from './sheet';
 export * from './sidebar';

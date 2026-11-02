@@ -1,6 +1,6 @@
+import { cn } from 'cn';
 import { Inter } from 'next/font/google';
 import { TooltipProvider } from '@/common/components';
-import { cn } from 'cn';
 import { QueryProvider } from '@/common/providers';
 import './globals.css';
 
