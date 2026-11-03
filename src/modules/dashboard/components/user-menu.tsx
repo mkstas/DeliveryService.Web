@@ -41,7 +41,9 @@ export const UserMenu: FC = () => {
           <DropdownMenu>
             <DropdownMenuTrigger render={<SidebarMenuButton size='lg' className='rounded-2xl' />}>
               <Avatar>
-                <AvatarImage src={`${API_URL}/static/${user?.imageUrl}`} alt={`Avatar ${user?.name}`} />
+                {user?.imageUrl && (
+                  <AvatarImage src={`${API_URL}/static/${user.imageUrl}`} alt={`Avatar ${user.name}`} />
+                )}
                 <AvatarFallback>
                   <UserIcon />
                 </AvatarFallback>

@@ -2,7 +2,7 @@
 
 import { FC } from 'react';
 import { cn } from 'cn';
-import { LogInIcon, LogOutIcon } from 'lucide-react';
+import { LogInIcon, LogOutIcon, UserIcon } from 'lucide-react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { Button, buttonVariants, Skeleton } from '@/common/components';
@@ -28,16 +28,22 @@ export const AuthActions: FC = () => {
   }
 
   return (
-    <Button
-      variant={'outline'}
-      onClick={() =>
-        logout.mutate(undefined, {
-          onSuccess: () => router.push(ROUTES.STORE),
-        })
-      }
-    >
-      <LogOutIcon />
-      <span>Выйти</span>
-    </Button>
+    <div className='flex items-center gap-2'>
+      <Link href={ROUTES.ACCOUNT} className={cn(buttonVariants({ variant: 'outline' }))}>
+        <UserIcon />
+        <span>Аккаунт</span>
+      </Link>
+      <Button
+        variant={'outline'}
+        onClick={() =>
+          logout.mutate(undefined, {
+            onSuccess: () => router.push(ROUTES.STORE),
+          })
+        }
+      >
+        <LogOutIcon />
+        <span>Выйти</span>
+      </Button>
+    </div>
   );
 };
