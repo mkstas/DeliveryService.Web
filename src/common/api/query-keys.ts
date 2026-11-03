@@ -3,6 +3,7 @@ export const queryKeys = {
     me: ['user_me'] as const,
   },
   users: ['users'] as const,
+  establishments: ['establishments'] as const,
   permissions: ['permissions'] as const,
   roles: ['roles'] as const,
 };

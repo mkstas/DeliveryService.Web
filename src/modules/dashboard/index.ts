@@ -1,6 +1,7 @@
 export * from './api';
 export * from './components/role-form';
 export * from './components/system-breadcrumb';
+export * from './components/system-establishments';
 export * from './components/system-sidebar';
 export * from './components/system-roles';
 export * from './components/system-users';

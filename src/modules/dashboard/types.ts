@@ -17,6 +17,33 @@ export type UserListItem = {
   roles: Role[];
 };
 
+export type EstablishmentAddress = {
+  id: string;
+  address: string;
+};
+
+export type Establishment = {
+  id: string;
+  name: string;
+  businessAccount: string;
+  addresses: EstablishmentAddress[];
+};
+
+export type CreateEstablishmentData = {
+  name: string;
+  businessAccount: string;
+};
+
+export type UpdateEstablishmentData = {
+  name: string;
+  businessAccount: string;
+};
+
+export type AddEstablishmentAddressData = {
+  establishmentId: string;
+  address: string;
+};
+
 export type CreateRoleData = {
   name: string;
 };

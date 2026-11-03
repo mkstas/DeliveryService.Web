@@ -1,4 +1,4 @@
-import { type LucideIcon, UserShieldIcon, UsersIcon } from 'lucide-react';
+import { type LucideIcon, MapPinIcon, UserShieldIcon, UsersIcon } from 'lucide-react';
 import { ROUTES } from '@/common/config';
 
 export type NavItem = {
@@ -19,5 +19,9 @@ export const navGroups: NavGroup[] = [
       { href: ROUTES.DASH_SYSTEM_USERS, label: 'Пользователи', icon: UsersIcon },
       { href: ROUTES.DASH_SYSTEM_ROLES, label: 'Роли', icon: UserShieldIcon },
     ],
+  },
+  {
+    label: 'Партнеры',
+    items: [{ href: ROUTES.DASH_SYSTEM_ESTABLISHMENTS, label: 'Заведения', icon: MapPinIcon }],
   },
 ];
