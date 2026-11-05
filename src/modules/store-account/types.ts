@@ -14,3 +14,7 @@ export type ConfirmUserEmailData = {
 export type ResendUserEmailData = {
   emailAddress: string;
 };
+
+export type UploadUserImageData = {
+  file: File;
+};

@@ -19,7 +19,7 @@ import {
   Skeleton,
   useSidebar,
 } from '@/common/components';
-import { API_URL, ROUTES } from '@/common/config';
+import { getUserImageUrl, ROUTES } from '@/common/config';
 import { useLogout, useUserMe } from '@/modules/store-auth';
 
 export const SidebarUserMenu: FC = () => {
@@ -33,7 +33,7 @@ export const SidebarUserMenu: FC = () => {
       <SidebarMenu>
         <SidebarMenuItem>
           <div className='flex items-center gap-2 px-3 py-2'>
-            <Skeleton className='size-8' />
+            <Skeleton className='size-8 rounded-full' />
             <div className='grid gap-2'>
               <Skeleton className='h-4 w-16' />
               <Skeleton className='h-3 w-28' />
@@ -50,7 +50,7 @@ export const SidebarUserMenu: FC = () => {
         <DropdownMenu>
           <DropdownMenuTrigger render={<SidebarMenuButton size='lg' className='rounded-lg' />}>
             <Avatar>
-              {user?.imageUrl && <AvatarImage src={`${API_URL}/static/${user.imageUrl}`} alt={`Avatar ${user.name}`} />}
+              {user?.imageUrl && <AvatarImage src={getUserImageUrl(user.imageUrl)} alt={`Avatar ${user.name}`} />}
               <AvatarFallback>
                 <UserIcon />
               </AvatarFallback>

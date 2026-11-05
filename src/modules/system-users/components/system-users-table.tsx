@@ -14,7 +14,7 @@ import {
   TableHeader,
   TableRow,
 } from '@/common/components';
-import { API_URL } from '@/common/config';
+import { getUserImageUrl } from '@/common/config';
 import { useRoles } from '@/modules/system-roles';
 import { useUsers } from '../hooks/useUsers';
 import { RolesPopover } from './roles-popover';
@@ -79,9 +79,7 @@ export const SystemUsersTable: FC = () => {
               <TableCell>
                 <div className='flex items-center gap-3'>
                   <Avatar>
-                    {user.imageUrl && (
-                      <AvatarImage src={`${API_URL}/static/${user.imageUrl}`} alt={`Аватар ${user.name}`} />
-                    )}
+                    {user.imageUrl && <AvatarImage src={getUserImageUrl(user.imageUrl)} alt={`Аватар ${user.name}`} />}
                     <AvatarFallback>
                       <UserIcon className='size-4' />
                     </AvatarFallback>

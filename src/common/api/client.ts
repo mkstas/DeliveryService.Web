@@ -36,13 +36,14 @@ const readErrorMessage = async (res: Response): Promise<string | undefined> => {
 
 export const http = async <T>(path: string, options: HttpOptions = {}): Promise<T> => {
   const { body, headers, ...rest } = options;
+  const isFormData = typeof FormData !== 'undefined' && body instanceof FormData;
 
   const res = await fetch(`${API_URL}/${path.replace(/^\/+/, '')}`, {
     ...rest,
     credentials: 'include',
-    ...(body !== undefined && { body: JSON.stringify(body) }),
+    ...(body !== undefined && { body: isFormData ? body : JSON.stringify(body) }),
     headers: {
-      ...(body !== undefined && { 'Content-type': 'application/json; charset=UTF-8' }),
+      ...(body !== undefined && !isFormData && { 'Content-type': 'application/json; charset=UTF-8' }),
       ...headers,
     },
   });
