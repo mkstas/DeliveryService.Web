@@ -1,10 +1,20 @@
 import { ROUTES } from '@/common/config';
-import { AuthShell, LoginForm } from '@/modules/auth';
+import { AuthLoginForm, AuthShell } from '@/modules/store-auth';
 
-export default function Auth() {
+type AuthPageProps = {
+  searchParams: Promise<{ emailAddress?: string }>;
+};
+
+export default async function AuthPage({ searchParams }: AuthPageProps) {
+  const { emailAddress } = await searchParams;
+
   return (
-    <AuthShell title='Вход в аккаунт' action={{ href: ROUTES.REGISTER, label: 'Регистрация' }}>
-      <LoginForm />
+    <AuthShell
+      title='Вход в аккаунт'
+      description='Введите электронную почту для входа в аккаунт'
+      action={{ href: ROUTES.REGISTER, label: 'Регистрация' }}
+    >
+      <AuthLoginForm defaultEmailAddress={emailAddress} />
     </AuthShell>
   );
 }

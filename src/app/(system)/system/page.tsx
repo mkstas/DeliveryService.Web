@@ -1,3 +1,3 @@
-export default function System() {
+export default function SystemPage() {
   return <div>System</div>;
 }

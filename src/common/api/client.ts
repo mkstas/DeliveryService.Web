@@ -1,18 +1,18 @@
 import { API_URL } from '@/common/config';
 
-export class ApiError extends Error {
+export class HttpError extends Error {
   readonly status: number;
   readonly serverMessage: string | undefined;
 
   constructor(status: number, serverMessage?: string) {
     super(serverMessage ?? `Request failed with status ${status}`);
-    this.name = 'ApiError';
+    this.name = 'HttpError';
     this.status = status;
     this.serverMessage = serverMessage;
   }
 }
 
-type ApiFetchOptions = Omit<RequestInit, 'body'> & {
+type HttpOptions = Omit<RequestInit, 'body'> & {
   body?: unknown;
 };
 
@@ -34,10 +34,10 @@ const readErrorMessage = async (res: Response): Promise<string | undefined> => {
   return undefined;
 };
 
-export const apiFetch = async <T>(path: string, options: ApiFetchOptions = {}): Promise<T> => {
+export const http = async <T>(path: string, options: HttpOptions = {}): Promise<T> => {
   const { body, headers, ...rest } = options;
 
-  const res = await fetch(`${API_URL}${path}`, {
+  const res = await fetch(`${API_URL}/${path.replace(/^\/+/, '')}`, {
     ...rest,
     credentials: 'include',
     ...(body !== undefined && { body: JSON.stringify(body) }),
@@ -48,7 +48,7 @@ export const apiFetch = async <T>(path: string, options: ApiFetchOptions = {}): 
   });
 
   if (!res.ok) {
-    throw new ApiError(res.status, await readErrorMessage(res));
+    throw new HttpError(res.status, await readErrorMessage(res));
   }
 
   if (res.status === 204) {

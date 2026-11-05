@@ -4,8 +4,9 @@ export const ROUTES = {
   LOGIN: '/auth',
   REGISTER: '/auth/register',
   CONFIRM: '/auth/confirm',
-  DASH_SYSTEM: '/system',
-  DASH_SYSTEM_USERS: '/system/users',
-  DASH_SYSTEM_ROLES: '/system/roles',
-  DASH_SYSTEM_ESTABLISHMENTS: '/system/establishments',
+  SYSTEM: '/system',
+  SYSTEM_USERS: '/system/users',
+  SYSTEM_ROLES: '/system/roles',
+  SYSTEM_ESTABLISHMENTS: '/system/establishments',
+  SYSTEM_CATEGORIES: '/system/categories',
 };

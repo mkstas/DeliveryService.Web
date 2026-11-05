@@ -1,3 +1,3 @@
-export default function Store() {
+export default function StorePage() {
   return <div>Store</div>;
 }

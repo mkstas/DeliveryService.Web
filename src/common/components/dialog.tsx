@@ -4,7 +4,7 @@ import * as React from 'react';
 import { cn } from 'cn';
 import { XIcon } from 'lucide-react';
 import { Dialog as DialogPrimitive } from '@base-ui/react/dialog';
-import { Button } from '@/common/components';
+import { Button } from '@/common/components/button';
 
 function Dialog({ ...props }: DialogPrimitive.Root.Props) {
   return <DialogPrimitive.Root data-slot='dialog' {...props} />;
@@ -58,13 +58,11 @@ function DialogContent({
         {showCloseButton && (
           <DialogPrimitive.Close
             data-slot='dialog-close'
-            render={
-              <Button variant='ghost' className='absolute top-2 right-2' size='icon-sm'>
-                <XIcon />
-                <span className='sr-only'>Close</span>
-              </Button>
-            }
-          />
+            render={<Button variant='ghost' className='absolute top-2 right-2' size='icon-sm' />}
+          >
+            <XIcon />
+            <span className='sr-only'>Close</span>
+          </DialogPrimitive.Close>
         )}
       </DialogPrimitive.Popup>
     </DialogPortal>
@@ -93,7 +91,7 @@ function DialogFooter({
       {...props}
     >
       {children}
-      {showCloseButton && <DialogPrimitive.Close render={<Button variant='outline'>Close</Button>} />}
+      {showCloseButton && <DialogPrimitive.Close render={<Button variant='outline' />}>Close</DialogPrimitive.Close>}
     </div>
   );
 }
@@ -102,7 +100,7 @@ function DialogTitle({ className, ...props }: DialogPrimitive.Title.Props) {
   return (
     <DialogPrimitive.Title
       data-slot='dialog-title'
-      className={cn('cn-font-heading text-base leading-none font-medium', className)}
+      className={cn('font-heading text-base leading-none font-medium', className)}
       {...props}
     />
   );

@@ -1,33 +1,25 @@
-import Link from 'next/link';
-import {
-  buttonVariants,
-  Card,
-  CardAction,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from '@/common/components';
+import { notFound } from 'next/navigation';
 import { ROUTES } from '@/common/config';
-import { ConfirmForm } from '@/modules/auth/components/confirm-form';
+import { AuthConfirmForm, AuthShell } from '@/modules/store-auth';
 
-export default function Register() {
+type ConfirmPageProps = {
+  searchParams: Promise<{ emailAddress?: string }>;
+};
+
+export default async function ConfirmPage({ searchParams }: ConfirmPageProps) {
+  const { emailAddress } = await searchParams;
+
+  if (!emailAddress) {
+    return notFound();
+  }
+
   return (
-    <div className='container mx-auto py-32'>
-      <Card className='max-w-md mx-auto'>
-        <CardHeader>
-          <CardTitle>Подтверждение почты</CardTitle>
-          <CardDescription>Отправили код на электронную почту</CardDescription>
-          <CardAction>
-            <Link href={ROUTES.REGISTER} className={buttonVariants({ variant: 'outline', size: 'sm' })}>
-              Изменить почту
-            </Link>
-          </CardAction>
-        </CardHeader>
-        <CardContent>
-          <ConfirmForm />
-        </CardContent>
-      </Card>
-    </div>
+    <AuthShell
+      title='Подтверждение почты'
+      description={`Мы отправили код на ${emailAddress}`}
+      action={{ href: ROUTES.LOGIN, label: 'Войти' }}
+    >
+      <AuthConfirmForm emailAddress={emailAddress} />
+    </AuthShell>
   );
 }

@@ -1,10 +1,14 @@
 import { ROUTES } from '@/common/config';
-import { AuthShell, RegisterForm } from '@/modules/auth';
+import { AuthRegisterForm, AuthShell } from '@/modules/store-auth';
 
-export default function Register() {
+export default function RegisterPage() {
   return (
-    <AuthShell title='Регистрация' action={{ href: ROUTES.LOGIN, label: 'Вход в аккаунт' }}>
-      <RegisterForm />
+    <AuthShell
+      title='Регистрация'
+      description='Введите имя и электронную почту для регистрации аккаунта'
+      action={{ href: ROUTES.LOGIN, label: 'Войти' }}
+    >
+      <AuthRegisterForm />
     </AuthShell>
   );
 }
