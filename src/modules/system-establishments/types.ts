@@ -17,3 +17,13 @@ export type CreateEstablishmentData = {
   name: string;
   businessAccount: string;
 };
+
+export type UpdateEstablishmentData = {
+  name: string;
+  businessAccount: string;
+};
+
+export type AddEstablishmentUserData = {
+  establishmentId: string;
+  emailAddress: string;
+};
