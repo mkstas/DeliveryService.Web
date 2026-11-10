@@ -1,7 +1,7 @@
 import { API_HOST, API_URL } from './env';
 
 const absoluteUrlPattern = /^(?:[a-z][a-z\d+\-.]*:|\/\/)/i;
-const userImagePath = 'static/users/image';
+const userImagePath = 'static/users';
 
 export const getUserImageUrl = (imageName: string | null | undefined): string | undefined => {
   if (!imageName) {

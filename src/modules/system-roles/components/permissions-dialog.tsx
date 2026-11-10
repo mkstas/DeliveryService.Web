@@ -1,39 +1,40 @@
-import { FC } from 'react';
+import { FC, useState } from 'react';
 import { ChevronDownIcon } from 'lucide-react';
 import {
   Button,
   Checkbox,
-  Popover,
-  PopoverContent,
-  PopoverDescription,
-  PopoverHeader,
-  PopoverTitle,
-  PopoverTrigger,
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
 } from '@/common/components';
 import { Role } from '@/modules/store-auth';
 import { usePermissions } from '../hooks/usePermissions';
 import { useToggleRolePermission } from '../hooks/useToggleRolePermission';
 
-type PermissionsPopoverProps = {
+type PermissionsDialogProps = {
   role: Role;
 };
 
-export const PermissionsPopover: FC<PermissionsPopoverProps> = ({ role }) => {
+export const PermissionsDialog: FC<PermissionsDialogProps> = ({ role }) => {
+  const [isOpen, setIsOpen] = useState<boolean>(false);
   const { data: permissions } = usePermissions();
   const togglePermission = useToggleRolePermission();
   const assignedPermissionIds = new Set(role.permissions.map(permission => permission.id));
 
   return (
-    <Popover>
-      <PopoverTrigger render={<Button variant='secondary' size='xs' />}>
-        Назначить разрешения <ChevronDownIcon className='text-muted-foreground' />
-      </PopoverTrigger>
-      <PopoverContent className='md:w-lg overflow-y-auto max-h-(--available-height)'>
-        <PopoverHeader>
-          <PopoverTitle>Разрешения роли</PopoverTitle>
-          <PopoverDescription>{role.name}</PopoverDescription>
-        </PopoverHeader>
-        <div className='grid min-h-0 items-start md:grid-cols-2 gap-2'>
+    <Dialog open={isOpen} onOpenChange={setIsOpen}>
+      <DialogTrigger render={<Button variant='secondary' />}>
+        Разрешения <ChevronDownIcon className='text-muted-foreground' />
+      </DialogTrigger>
+      <DialogContent className='sm:max-w-2xl w-full h-96 overflow-y-auto'>
+        <DialogHeader>
+          <DialogTitle>Разрешения роли</DialogTitle>
+          <DialogDescription>{role.name}</DialogDescription>
+        </DialogHeader>
+        <div className='grid sm:grid-cols-2 gap-2'>
           {permissions?.map(permission => (
             <div key={permission.id} className='flex items-start gap-2'>
               <Checkbox
@@ -50,11 +51,11 @@ export const PermissionsPopover: FC<PermissionsPopoverProps> = ({ role }) => {
               </label>
             </div>
           ))}
+          {togglePermission.isError && (
+            <p className='text-sm text-destructive'>Не удалось изменить разрешение, попробуйте снова</p>
+          )}
         </div>
-        {togglePermission.isError && (
-          <p className='text-sm text-destructive'>Не удалось изменить разрешение, попробуйте снова</p>
-        )}
-      </PopoverContent>
-    </Popover>
+      </DialogContent>
+    </Dialog>
   );
 };

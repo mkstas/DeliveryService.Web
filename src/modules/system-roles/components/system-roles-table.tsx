@@ -4,7 +4,7 @@ import { FC } from 'react';
 import { Skeleton, Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/common/components';
 import { usePermissions } from '../hooks/usePermissions';
 import { useRoles } from '../hooks/useRoles';
-import { PermissionsPopover } from './permissions-popover';
+import { PermissionsDialog } from './permissions-dialog';
 import { UpdateRoleDialog } from './update-role-dialog';
 
 export const SystemRolesTable: FC = () => {
@@ -17,14 +17,11 @@ export const SystemRolesTable: FC = () => {
         <Table className='table-fixed'>
           <TableHeader>
             <TableRow>
-              <TableHead className='w-2/5'>
-                <Skeleton className='w-28 h-5' />
+              <TableHead className='w-48'>
+                <Skeleton className='w-24 h-5 rounded-md' />
               </TableHead>
-              <TableHead className='w-2/5'>
-                <Skeleton className='w-28 h-5' />
-              </TableHead>
-              <TableHead className='w-1/5'>
-                <Skeleton className='w-28 h-5 ml-auto' />
+              <TableHead>
+                <Skeleton className='w-24 h-5 ml-auto rounded-md' />
               </TableHead>
             </TableRow>
           </TableHeader>
@@ -32,14 +29,11 @@ export const SystemRolesTable: FC = () => {
             {Array.from({ length: 3 }).map((_, index) => (
               <TableRow key={index}>
                 <TableCell>
-                  <Skeleton className='h-4 w-32' />
-                </TableCell>
-                <TableCell>
-                  <Skeleton className='h-4 w-40' />
+                  <Skeleton className='h-5 w-32 rounded-md' />
                 </TableCell>
                 <TableCell className='flex justify-end gap-2'>
-                  <Skeleton className='h-9 w-10 rounded-4xl' />
-                  <Skeleton className='h-9 w-10 rounded-4xl' />
+                  <Skeleton className='h-8 w-32 rounded-lg' />
+                  <Skeleton className='h-8 w-10 rounded-lg' />
                 </TableCell>
               </TableRow>
             ))}
@@ -54,19 +48,16 @@ export const SystemRolesTable: FC = () => {
       <Table>
         <TableHeader>
           <TableRow>
-            <TableHead className='w-2/5'>Название</TableHead>
-            <TableHead className='w-2/5'>Разрешения</TableHead>
-            <TableHead className='w-1/5 text-right'>Действия</TableHead>
+            <TableHead className='w-48'>Название</TableHead>
+            <TableHead className='text-right'>Действия</TableHead>
           </TableRow>
         </TableHeader>
         <TableBody>
           {roles?.map(role => (
             <TableRow key={role.id}>
               <TableCell>{role.name}</TableCell>
-              <TableCell>
-                <PermissionsPopover role={role} />
-              </TableCell>
               <TableCell className='flex gap-2 justify-end'>
+                <PermissionsDialog role={role} />
                 <UpdateRoleDialog role={role} />
               </TableCell>
             </TableRow>

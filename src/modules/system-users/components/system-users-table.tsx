@@ -17,7 +17,7 @@ import {
 import { getUserImageUrl } from '@/common/config';
 import { useRoles } from '@/modules/system-roles';
 import { useUsers } from '../hooks/useUsers';
-import { RolesPopover } from './roles-popover';
+import { RolesDialog } from './roles-dialog';
 
 export const SystemUsersTable: FC = () => {
   const { data: users, isLoading: isLoadingUsers } = useUsers();
@@ -29,14 +29,14 @@ export const SystemUsersTable: FC = () => {
         <Table>
           <TableHeader>
             <TableRow>
-              <TableHead className='w-2/5'>
-                <Skeleton className='w-32 h-5' />
+              <TableHead className='w-48'>
+                <Skeleton className='w-24 h-5 rounded-md' />
               </TableHead>
-              <TableHead className='w-2/5'>
-                <Skeleton className='w-28 h-5' />
+              <TableHead className='w-48'>
+                <Skeleton className='w-24 h-5 rounded-md' />
               </TableHead>
-              <TableHead className='w-1/5'>
-                <Skeleton className='w-16 h-5' />
+              <TableHead>
+                <Skeleton className='w-24 h-5 ml-auto rounded-md' />
               </TableHead>
             </TableRow>
           </TableHeader>
@@ -46,14 +46,14 @@ export const SystemUsersTable: FC = () => {
                 <TableCell>
                   <div className='flex items-center gap-2'>
                     <Skeleton className='size-8 rounded-full' />
-                    <Skeleton className='h-4 w-32' />
+                    <Skeleton className='h-5 w-32 rounded-md' />
                   </div>
                 </TableCell>
                 <TableCell>
-                  <Skeleton className='h-4 w-40' />
+                  <Skeleton className='h-5 w-32 rounded-md' />
                 </TableCell>
-                <TableCell>
-                  <Skeleton className='h-5 w-40' />
+                <TableCell className='flex justify-end gap-2'>
+                  <Skeleton className='h-8 w-32 rounded-lg' />
                 </TableCell>
               </TableRow>
             ))}
@@ -68,9 +68,9 @@ export const SystemUsersTable: FC = () => {
       <Table>
         <TableHeader>
           <TableRow>
-            <TableHead className='w-2/5'>Имя пользователя</TableHead>
-            <TableHead className='w-2/5'>Электронная почта</TableHead>
-            <TableHead className='w-1/5'>Роли</TableHead>
+            <TableHead className='w-48'>Имя пользователя</TableHead>
+            <TableHead className='w-48'>Электронная почта</TableHead>
+            <TableHead className='text-right'>Действия</TableHead>
           </TableRow>
         </TableHeader>
         <TableBody>
@@ -90,7 +90,9 @@ export const SystemUsersTable: FC = () => {
               <TableCell>
                 <span>{user.emailAddress}</span>
               </TableCell>
-              <TableCell>{<RolesPopover user={user} />}</TableCell>
+              <TableCell className='flex items-center gap-2 justify-end'>
+                <RolesDialog user={user} />
+              </TableCell>
             </TableRow>
           ))}
         </TableBody>

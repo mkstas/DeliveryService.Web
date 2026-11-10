@@ -31,7 +31,7 @@ export const UpdateRoleDialog: FC<UpdateRoleDialogProps> = ({ role }) => {
           <DialogTitle>Обновление роли</DialogTitle>
           <DialogDescription>Измените название роли</DialogDescription>
         </DialogHeader>
-        {open && <UpdateRoleForm role={role} onSuccess={() => setOpen(false)} />}
+        <UpdateRoleForm role={role} onSuccess={() => setOpen(false)} />
       </DialogContent>
     </Dialog>
   );

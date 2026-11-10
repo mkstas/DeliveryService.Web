@@ -27,7 +27,7 @@ export const CreateRoleDialog: FC = () => {
           <DialogTitle>Создание роли</DialogTitle>
           <DialogDescription>Укажите название новой роли</DialogDescription>
         </DialogHeader>
-        {open && <CreateRoleForm onSuccess={() => setOpen(false)} />}
+        <CreateRoleForm onSuccess={() => setOpen(false)} />
       </DialogContent>
     </Dialog>
   );

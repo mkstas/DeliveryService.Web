@@ -10,7 +10,7 @@ export const useUploadUserImage = () => {
       const body = new FormData();
       body.append('file', file);
 
-      return http<void>('static/users/image', { method: 'POST', body });
+      return http<void>('static/users', { method: 'POST', body });
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: queryKeys.user.me });
