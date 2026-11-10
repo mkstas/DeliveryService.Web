@@ -9,4 +9,8 @@ export const ROUTES = {
   SYSTEM_ROLES: '/system/roles',
   SYSTEM_ESTABLISHMENTS: '/system/establishments',
   SYSTEM_CATEGORIES: '/system/categories',
+  SYSTEM_SPECIFICATIONS: '/system/specifications',
+  SYSTEM_INGREDIENTS: '/system/ingredients',
+  SYSTEM_MODIFIERS: '/system/modifiers',
+  SYSTEM_DISHES: '/system/dishes',
 };

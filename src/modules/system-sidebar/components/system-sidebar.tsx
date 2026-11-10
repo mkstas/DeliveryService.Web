@@ -1,5 +1,16 @@
 import { FC } from 'react';
-import { LayoutGridCirclesIcon, LucideIcon, MapPinIcon, UserShieldIcon, UsersIcon } from 'lucide-react';
+import {
+  ClipboardPenLineIcon,
+  LayoutGridCirclesIcon,
+  LeafyGreenIcon,
+  LucideIcon,
+  MapPinIcon,
+  PackageIcon,
+  PlusCircleIcon,
+  SoupIcon,
+  UserShieldIcon,
+  UsersIcon,
+} from 'lucide-react';
 import Link from 'next/link';
 import {
   Sidebar,
@@ -41,7 +52,13 @@ export const menuGroups: MenuGroup[] = [
   },
   {
     label: 'Продукты',
-    items: [{ href: ROUTES.SYSTEM_CATEGORIES, label: 'Категории', icon: LayoutGridCirclesIcon }],
+    items: [
+      { href: ROUTES.SYSTEM_CATEGORIES, label: 'Категории', icon: LayoutGridCirclesIcon },
+      { href: ROUTES.SYSTEM_SPECIFICATIONS, label: 'Характеристики', icon: ClipboardPenLineIcon },
+      { href: ROUTES.SYSTEM_INGREDIENTS, label: 'Ингредиенты', icon: LeafyGreenIcon },
+      { href: ROUTES.SYSTEM_MODIFIERS, label: 'Модификаторы', icon: PlusCircleIcon },
+      { href: ROUTES.SYSTEM_DISHES, label: 'Блюда', icon: SoupIcon },
+    ],
   },
 ];
 
