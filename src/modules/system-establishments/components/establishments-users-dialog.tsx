@@ -19,6 +19,7 @@ import {
   TableRow,
 } from '@/common/components';
 import { getUserImageUrl } from '@/common/config';
+import { useRemoveEstablishmentUser } from '../hooks/useRemoveEstablishmentUser';
 import { Establishment } from '../types';
 import { AddEstablishmentUserForm } from './add-establishments-user-form';
 
@@ -28,6 +29,7 @@ type EstablishmentUsersDialogProps = {
 
 export const EstablishmentUsersDialog: FC<EstablishmentUsersDialogProps> = ({ establishment }) => {
   const [isOpen, setIsOpen] = useState<boolean>(false);
+  const removeEstablishmentUser = useRemoveEstablishmentUser();
 
   return (
     <Dialog open={isOpen} onOpenChange={setIsOpen}>
@@ -69,7 +71,12 @@ export const EstablishmentUsersDialog: FC<EstablishmentUsersDialogProps> = ({ es
                     <span>{user.emailAddress}</span>
                   </TableCell>
                   <TableCell className='flex items-center gap-2 justify-end'>
-                    <Button variant='destructive'>
+                    <Button
+                      variant='destructive'
+                      onClick={() =>
+                        removeEstablishmentUser.mutate({ establishmentId: establishment.id, userId: user.id })
+                      }
+                    >
                       <TrashIcon />
                     </Button>
                   </TableCell>

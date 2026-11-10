@@ -18,7 +18,7 @@ export const HaderAuthActions: FC = () => {
   if (!user) {
     return (
       <Link href={ROUTES.LOGIN} className={cn(buttonVariants({ variant: 'secondary', size: 'sm' }), 'pl-0')}>
-        <Avatar className='size-8 shrink-0'>
+        <Avatar className='size-8 shrink-0 -ml-1'>
           <AvatarFallback>
             <LogInIcon className='text-accent-foreground' />
           </AvatarFallback>

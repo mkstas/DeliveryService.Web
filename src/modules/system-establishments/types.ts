@@ -27,3 +27,8 @@ export type AddEstablishmentUserData = {
   establishmentId: string;
   emailAddress: string;
 };
+
+export type RemoveEstablishmentUserData = {
+  establishmentId: string;
+  userId: string;
+};
