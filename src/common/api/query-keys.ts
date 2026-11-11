@@ -7,4 +7,5 @@ export const queryKeys = {
   },
   establishments: ['establishments'] as const,
   categories: ['categories'] as const,
+  specifications: ['specifications'] as const,
 };
