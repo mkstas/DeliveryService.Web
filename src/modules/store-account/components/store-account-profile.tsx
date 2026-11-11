@@ -18,7 +18,7 @@ import {
 } from '@/common/components';
 import { getUserImageUrl, ROUTES } from '@/common/config';
 import { useLogout, useUserMe } from '@/modules/store-auth';
-import { useUploadUserImage } from '../hooks/useUploadUserImage';
+import { useUploadUserImage } from '../hooks/mutations';
 
 const MAX_AVATAR_SIZE = 5 * 1024 * 1024;
 const ALLOWED_AVATAR_TYPES = new Set(['image/jpeg', 'image/png', 'image/webp', 'image/gif']);

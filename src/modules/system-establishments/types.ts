@@ -1,4 +1,4 @@
-import { User } from '../store-auth';
+import { type User } from '@/common/api';
 
 export type EstablishmentAddress = {
   id: string;

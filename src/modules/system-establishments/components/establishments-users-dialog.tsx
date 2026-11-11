@@ -1,25 +1,8 @@
-import { FC, useState } from 'react';
-import { ChevronDownIcon, TrashIcon, UserIcon } from 'lucide-react';
-import {
-  Avatar,
-  AvatarFallback,
-  AvatarImage,
-  Button,
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from '@/common/components';
-import { getUserImageUrl } from '@/common/config';
-import { useRemoveEstablishmentUser } from '../hooks/useRemoveEstablishmentUser';
+import { type FC } from 'react';
+import { ChevronDownIcon, TrashIcon } from 'lucide-react';
+import { Button, Table, TableBody, TableCell, TableHead, TableHeader, TableRow, UserCell } from '@/common/components';
+import { FormDialog } from '@/common/forms';
+import { useRemoveEstablishmentUser } from '../hooks/mutations';
 import { Establishment } from '../types';
 import { AddEstablishmentUserForm } from './add-establishments-user-form';
 
@@ -28,19 +11,16 @@ type EstablishmentUsersDialogProps = {
 };
 
 export const EstablishmentUsersDialog: FC<EstablishmentUsersDialogProps> = ({ establishment }) => {
-  const [isOpen, setIsOpen] = useState<boolean>(false);
   const removeEstablishmentUser = useRemoveEstablishmentUser();
 
   return (
-    <Dialog open={isOpen} onOpenChange={setIsOpen}>
-      <DialogTrigger render={<Button variant='secondary' />}>
-        Менеджеры <ChevronDownIcon className='text-muted-foreground' />
-      </DialogTrigger>
-      <DialogContent className='sm:max-w-2xl w-full'>
-        <DialogHeader>
-          <DialogTitle>Менеджеры заведения</DialogTitle>
-          <DialogDescription>Управление списком менеджеров заведения</DialogDescription>
-        </DialogHeader>
+    <FormDialog
+      trigger={{ text: 'Менеджеры', trailingIcon: ChevronDownIcon, variant: 'secondary' }}
+      title='Менеджеры заведения'
+      description='Управление списком менеджеров заведения'
+      contentClassName='sm:max-w-2xl w-full'
+    >
+      <>
         <AddEstablishmentUserForm establishmentId={establishment.id} />
         <div className='border rounded-lg overflow-hidden'>
           <Table>
@@ -55,17 +35,7 @@ export const EstablishmentUsersDialog: FC<EstablishmentUsersDialogProps> = ({ es
               {establishment.users?.map(user => (
                 <TableRow key={user.id}>
                   <TableCell>
-                    <div className='flex items-center gap-3'>
-                      <Avatar>
-                        {user.imageUrl && (
-                          <AvatarImage src={getUserImageUrl(user.imageUrl)} alt={`Аватар ${user.name}`} />
-                        )}
-                        <AvatarFallback>
-                          <UserIcon className='size-4' />
-                        </AvatarFallback>
-                      </Avatar>
-                      <span>{user.name}</span>
-                    </div>
+                    <UserCell imageUrl={user.imageUrl} name={user.name} />
                   </TableCell>
                   <TableCell>
                     <span>{user.emailAddress}</span>
@@ -85,7 +55,7 @@ export const EstablishmentUsersDialog: FC<EstablishmentUsersDialogProps> = ({ es
             </TableBody>
           </Table>
         </div>
-      </DialogContent>
-    </Dialog>
+      </>
+    </FormDialog>
   );
 };

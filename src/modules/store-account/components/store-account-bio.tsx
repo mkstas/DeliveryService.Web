@@ -1,23 +1,22 @@
 'use client';
 
-import { FC, useState } from 'react';
-import { LoaderCircleIcon, PencilIcon, UserIcon } from 'lucide-react';
+import { type FC, useState } from 'react';
+import { PencilIcon, UserIcon } from 'lucide-react';
 import { notFound } from 'next/navigation';
 import { z } from 'zod';
 import { useForm } from '@tanstack/react-form';
-import { HttpError } from '@/common/api';
+import { type User } from '@/common/api';
+import { Button, FieldGroup, Skeleton } from '@/common/components';
 import {
-  Button,
-  Field,
-  FieldError,
-  FieldGroup,
-  InputGroup,
-  InputGroupAddon,
-  InputGroupInput,
-  Skeleton,
-} from '@/common/components';
-import { User, useUserMe } from '@/modules/store-auth';
-import { useUpdateUserBio } from '../hooks/useUpdateUserBio';
+  clearServerErrors,
+  FormShell,
+  getServerErrorMessage,
+  setServerError,
+  SubmitButton,
+  TextField,
+} from '@/common/forms';
+import { useUserMe } from '@/modules/store-auth';
+import { useUpdateUserBio } from '../hooks/mutations';
 
 const accountBioFormSchema = z.object({
   name: z.string().trim().min(1, 'Имя не может быть пустым').max(256, 'Максимальная длина 256 символов'),
@@ -28,14 +27,6 @@ type AccountBioFormSchema = z.infer<typeof accountBioFormSchema>;
 type AccountBioFormProps = {
   user: User;
   onSubmit: () => void;
-};
-
-const getUpdateUserBioErrorMessage = (error: unknown): string => {
-  if (error instanceof HttpError && error.serverMessage) {
-    return error.serverMessage;
-  }
-
-  return 'Ошибка сохранения имени, попробуйте снова позже';
 };
 
 const AccountBioForm: FC<AccountBioFormProps> = ({ user, onSubmit }) => {
@@ -49,10 +40,7 @@ const AccountBioForm: FC<AccountBioFormProps> = ({ user, onSubmit }) => {
       onChange: accountBioFormSchema,
     },
     onSubmit: async ({ value }) => {
-      form.setFieldMeta('name', prev => ({
-        ...prev,
-        errorMap: { ...prev.errorMap, onServer: undefined },
-      }));
+      clearServerErrors(form, ['name']);
 
       if (value.name === user.name) {
         onSubmit();
@@ -63,89 +51,42 @@ const AccountBioForm: FC<AccountBioFormProps> = ({ user, onSubmit }) => {
         await userBio.mutateAsync(value);
         onSubmit();
       } catch (error) {
-        form.setFieldMeta('name', prev => ({
-          ...prev,
-          errorMap: { ...prev.errorMap, onServer: [{ message: getUpdateUserBioErrorMessage(error) }] },
-        }));
+        setServerError(
+          form,
+          'name',
+          getServerErrorMessage(error, {}, 'Ошибка сохранения имени, попробуйте снова позже'),
+        );
       }
     },
   });
 
   return (
-    <form
-      className='flex flex-col gap-2 rounded-xl border bg-muted/20 p-3'
-      onSubmit={e => {
-        e.preventDefault();
-        e.stopPropagation();
-        form.handleSubmit();
-      }}
-    >
+    <FormShell form={form} className='flex flex-col gap-2 rounded-xl border bg-muted/20 p-3'>
       <FieldGroup>
-        <form.Field
+        <TextField
+          form={form}
           name='name'
-          listeners={{
-            onChange: () => {
-              form.setFieldMeta('name', prev => ({
-                ...prev,
-                errorMap: { ...prev.errorMap, onServer: undefined },
-              }));
-            },
-          }}
-        >
-          {field => {
-            const isError =
-              field.state.meta.errors.length > 0 && (field.state.meta.isTouched || form.state.isSubmitted);
-
-            return (
-              <Field>
-                <div className='flex flex-col gap-2 sm:flex-row sm:items-start'>
-                  <div className='flex min-w-0 flex-1 flex-col gap-2'>
-                    <InputGroup>
-                      <InputGroupAddon>
-                        <UserIcon />
-                      </InputGroupAddon>
-                      <InputGroupInput
-                        id='user_name'
-                        type='text'
-                        autoComplete='name'
-                        aria-invalid={isError}
-                        placeholder='Ваше имя'
-                        value={field.state.value}
-                        onChange={e => field.handleChange(e.target.value)}
-                        onBlur={field.handleBlur}
-                      />
-                    </InputGroup>
-                    {isError && <FieldError errors={field.state.meta.errors.slice(0, 1)} />}
-                  </div>
-                  <div className='flex shrink-0 gap-2'>
-                    <form.Subscribe
-                      selector={state => ({
-                        isSubmitting: state.isSubmitting,
-                        name: state.values.name,
-                      })}
-                    >
-                      {({ isSubmitting, name }) => (
-                        <Button
-                          type='submit'
-                          className='flex-1 sm:flex-none'
-                          disabled={isSubmitting || name.trim() === user.name}
-                        >
-                          {isSubmitting && <LoaderCircleIcon className='animate-spin' />}
-                          Сохранить
-                        </Button>
-                      )}
-                    </form.Subscribe>
-                    <Button type='button' variant='secondary' className='flex-1 sm:flex-none' onClick={onSubmit}>
-                      Отмена
-                    </Button>
-                  </div>
-                </div>
-              </Field>
-            );
-          }}
-        </form.Field>
+          icon={UserIcon}
+          autoComplete='name'
+          placeholder='Ваше имя'
+          actions={
+            <>
+              <SubmitButton
+                form={form}
+                className='flex-1 sm:flex-none'
+                withSpinner
+                disabled={values => values.name.trim() === user.name}
+              >
+                Сохранить
+              </SubmitButton>
+              <Button type='button' variant='secondary' className='flex-1 sm:flex-none' onClick={onSubmit}>
+                Отмена
+              </Button>
+            </>
+          }
+        />
       </FieldGroup>
-    </form>
+    </FormShell>
   );
 };
 

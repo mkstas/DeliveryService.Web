@@ -1,29 +1,24 @@
 'use client';
 
-import { FC } from 'react';
+import { type FC } from 'react';
 import { cn } from 'cn';
-import { KeyRoundIcon, LoaderCircleIcon } from 'lucide-react';
+import { LoaderCircleIcon } from 'lucide-react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { z } from 'zod';
 import { useForm } from '@tanstack/react-form';
-import { HttpError } from '@/common/api';
-import {
-  Button,
-  buttonVariants,
-  Field,
-  FieldError,
-  FieldGroup,
-  FieldLabel,
-  InputGroup,
-  InputGroupAddon,
-  InputGroupInput,
-} from '@/common/components';
+import { Button, buttonVariants, FieldGroup } from '@/common/components';
 import { ROUTES } from '@/common/config';
+import {
+  clearServerErrors,
+  CodeField,
+  FormShell,
+  getServerErrorMessage,
+  setServerError,
+  SubmitButton,
+} from '@/common/forms';
 import { takeConfirmPassword } from '../confirm-password-storage';
-import { useConfirm } from '../hooks/useConfirm';
-import { useLogin } from '../hooks/useLogin';
-import { useResend } from '../hooks/useResend';
+import { useConfirm, useLogin, useResend } from '../hooks/mutations';
 
 const confirmFormSchema = z.object({
   code: z.string().trim().length(6, 'Код состоит из шести символов'),
@@ -33,20 +28,6 @@ type ConfirmFormSchema = z.infer<typeof confirmFormSchema>;
 
 type AuthConfirmFormProps = {
   emailAddress?: string;
-};
-
-const getConfirmErrorMessage = (error: unknown): string => {
-  if (error instanceof HttpError) {
-    if (error.status === 403) {
-      return 'Неверный код подтверждения';
-    }
-
-    if (error.serverMessage) {
-      return error.serverMessage;
-    }
-  }
-
-  return 'Не удалось подтвердить почту, попробуйте снова позже';
 };
 
 export const AuthConfirmForm: FC<AuthConfirmFormProps> = ({ emailAddress }) => {
@@ -63,10 +44,7 @@ export const AuthConfirmForm: FC<AuthConfirmFormProps> = ({ emailAddress }) => {
       onChange: confirmFormSchema,
     },
     onSubmit: async ({ value }) => {
-      form.setFieldMeta('code', prev => ({
-        ...prev,
-        errorMap: { ...prev.errorMap, onServer: undefined },
-      }));
+      clearServerErrors(form, ['code']);
 
       if (!emailAddress) {
         return;
@@ -75,10 +53,15 @@ export const AuthConfirmForm: FC<AuthConfirmFormProps> = ({ emailAddress }) => {
       try {
         await confirm.mutateAsync({ code: value.code.trim(), emailAddress });
       } catch (error) {
-        form.setFieldMeta('code', prev => ({
-          ...prev,
-          errorMap: { ...prev.errorMap, onServer: [{ message: getConfirmErrorMessage(error) }] },
-        }));
+        setServerError(
+          form,
+          'code',
+          getServerErrorMessage(
+            error,
+            { 403: 'Неверный код подтверждения' },
+            'Не удалось подтвердить почту, попробуйте снова позже',
+          ),
+        );
 
         return;
       }
@@ -112,63 +95,12 @@ export const AuthConfirmForm: FC<AuthConfirmFormProps> = ({ emailAddress }) => {
   }
 
   return (
-    <form
-      onSubmit={e => {
-        e.preventDefault();
-        e.stopPropagation();
-        form.handleSubmit();
-      }}
-    >
+    <FormShell form={form}>
       <FieldGroup>
-        <form.Field
-          name='code'
-          listeners={{
-            onChange: () => {
-              form.setFieldMeta('code', prev => ({
-                ...prev,
-                errorMap: { ...prev.errorMap, onServer: undefined },
-              }));
-            },
-          }}
-        >
-          {field => {
-            const isError =
-              field.state.meta.errors.length > 0 && (field.state.meta.isTouched || form.state.isSubmitted);
-
-            return (
-              <Field>
-                <FieldLabel htmlFor='auth_email_code'>Код из письма</FieldLabel>
-                <InputGroup>
-                  <InputGroupAddon>
-                    <KeyRoundIcon />
-                  </InputGroupAddon>
-                  <InputGroupInput
-                    id='auth_email_code'
-                    type='text'
-                    inputMode='numeric'
-                    autoComplete='one-time-code'
-                    maxLength={6}
-                    aria-invalid={isError}
-                    placeholder='000000'
-                    value={field.state.value}
-                    onChange={e => field.handleChange(e.target.value)}
-                    onBlur={field.handleBlur}
-                  />
-                </InputGroup>
-                {isError && <FieldError errors={field.state.meta.errors.slice(0, 1)} />}
-              </Field>
-            );
-          }}
-        </form.Field>
-
-        <form.Subscribe selector={state => state.isSubmitting}>
-          {isSubmitting => (
-            <Button type='submit' size='lg' className='w-full' disabled={isSubmitting}>
-              {isSubmitting && <LoaderCircleIcon className='animate-spin' />}
-              Подтвердить
-            </Button>
-          )}
-        </form.Subscribe>
+        <CodeField form={form} name='code' label='Код из письма' />
+        <SubmitButton form={form} size='lg' className='w-full' withSpinner>
+          Подтвердить
+        </SubmitButton>
 
         <div className='flex flex-col items-center gap-2'>
           <Button
@@ -185,6 +117,6 @@ export const AuthConfirmForm: FC<AuthConfirmFormProps> = ({ emailAddress }) => {
           {resend.isError && <p className='text-sm text-destructive'>Не удалось отправить код</p>}
         </div>
       </FieldGroup>
-    </form>
+    </FormShell>
   );
 };

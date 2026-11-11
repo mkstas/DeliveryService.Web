@@ -2,7 +2,7 @@
 
 import { FC } from 'react';
 import { Skeleton } from '@/common/components';
-import { useEstablishments } from '../hooks/useEstablishments';
+import { useEstablishments } from '../hooks/queries';
 import { CreateEstablishmentDialog } from './create-establishment-dialog';
 
 export const SystemEstablishmentsActions: FC = () => {

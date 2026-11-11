@@ -2,8 +2,7 @@
 
 import { FC } from 'react';
 import { Skeleton } from '@/common/components';
-import { usePermissions } from '../hooks/usePermissions';
-import { useRoles } from '../hooks/useRoles';
+import { usePermissions, useRoles } from '../hooks/queries';
 import { CreateRoleDialog } from './create-role-dialog';
 
 export const SystemRolesActions: FC = () => {

@@ -5,7 +5,6 @@ import {
   LeafyGreenIcon,
   LucideIcon,
   MapPinIcon,
-  PackageIcon,
   PlusCircleIcon,
   SoupIcon,
   UserShieldIcon,

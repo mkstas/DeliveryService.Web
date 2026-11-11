@@ -1,19 +1,19 @@
-import { FC } from 'react';
+'use client';
+
+import { type FC } from 'react';
 import { MailIcon } from 'lucide-react';
-import z from 'zod';
+import { z } from 'zod';
 import { useForm } from '@tanstack/react-form';
-import { HttpError } from '@/common/api';
+import { FieldGroup } from '@/common/components';
 import {
-  Button,
-  Field,
-  FieldError,
-  FieldGroup,
-  FieldLabel,
-  InputGroup,
-  InputGroupAddon,
-  InputGroupInput,
-} from '@/common/components';
-import { useAddEstablishmentUser } from '../hooks/useAddEstablishmentUser';
+  clearServerErrors,
+  FormShell,
+  getServerErrorMessage,
+  setServerError,
+  SubmitButton,
+  TextField,
+} from '@/common/forms';
+import { useAddEstablishmentUser } from '../hooks/mutations';
 
 const addEstablishmentUserFormSchema = z.object({
   emailAddress: z.email('Неверный формат эл. почты').max(254, 'Максимальная длина 254 символа'),
@@ -23,20 +23,6 @@ type AddEstablishmentUserFormSchema = z.infer<typeof addEstablishmentUserFormSch
 
 type AddEstablishmentUserFormProps = {
   establishmentId: string;
-};
-
-const getErrorMessage = (error: unknown): string => {
-  if (error instanceof HttpError) {
-    if (error.status === 404) {
-      return 'Пользователь не найден';
-    }
-
-    if (error.serverMessage) {
-      return error.serverMessage;
-    }
-  }
-
-  return 'Не удалось создать заведение, попробуйте снова позже';
 };
 
 export const AddEstablishmentUserForm: FC<AddEstablishmentUserFormProps> = ({ establishmentId }) => {
@@ -50,78 +36,40 @@ export const AddEstablishmentUserForm: FC<AddEstablishmentUserFormProps> = ({ es
       onChange: addEstablishmentUserFormSchema,
     },
     onSubmit: async ({ value }) => {
-      form.setFieldMeta('emailAddress', prev => ({
-        ...prev,
-        errorMap: { ...prev.errorMap, onServer: undefined },
-      }));
+      clearServerErrors(form, ['emailAddress']);
 
       try {
         await addEstablishmentUser.mutateAsync({ establishmentId, emailAddress: value.emailAddress });
         form.reset();
       } catch (error) {
-        form.setFieldMeta('emailAddress', prev => ({
-          ...prev,
-          errorMap: { ...prev.errorMap, onServer: [{ message: getErrorMessage(error) }] },
-        }));
+        setServerError(
+          form,
+          'emailAddress',
+          getServerErrorMessage(
+            error,
+            { 404: 'Пользователь не найден' },
+            'Не удалось добавить менеджера, попробуйте снова позже',
+          ),
+        );
       }
     },
   });
 
   return (
-    <form
-      onSubmit={e => {
-        e.preventDefault();
-        e.stopPropagation();
-        form.handleSubmit();
-      }}
-    >
+    <FormShell form={form}>
       <FieldGroup className='sm:flex-row sm:items-start sm:gap-3'>
-        <form.Field
+        <TextField
+          form={form}
           name='emailAddress'
-          listeners={{
-            onChange: () => {
-              form.setFieldMeta('emailAddress', prev => ({
-                ...prev,
-                errorMap: { ...prev.errorMap, onServer: undefined },
-              }));
-            },
-          }}
-        >
-          {field => {
-            const isError =
-              field.state.meta.errors.length > 0 && (field.state.meta.isTouched || form.state.isSubmitted);
-
-            return (
-              <Field>
-                <InputGroup>
-                  <InputGroupAddon>
-                    <MailIcon />
-                  </InputGroupAddon>
-                  <InputGroupInput
-                    id='auth_email_address'
-                    type='email'
-                    autoComplete='email'
-                    aria-invalid={isError}
-                    placeholder='эл. почта менеджера'
-                    value={field.state.value}
-                    onChange={e => field.handleChange(e.target.value)}
-                    onBlur={field.handleBlur}
-                  />
-                </InputGroup>
-                {isError && <FieldError errors={field.state.meta.errors.slice(0, 1)} />}
-              </Field>
-            );
-          }}
-        </form.Field>
-
-        <form.Subscribe selector={state => state.isSubmitting}>
-          {isSubmitting => (
-            <Button type='submit' className='max-sm:w-full' disabled={isSubmitting}>
-              Добавить
-            </Button>
-          )}
-        </form.Subscribe>
+          icon={MailIcon}
+          type='email'
+          autoComplete='email'
+          placeholder='эл. почта менеджера'
+        />
+        <SubmitButton form={form} className='max-sm:w-full'>
+          Добавить
+        </SubmitButton>
       </FieldGroup>
-    </form>
+    </FormShell>
   );
 };

@@ -1,22 +1,18 @@
 'use client';
 
-import { FC } from 'react';
-import { UserIcon } from 'lucide-react';
+import { type FC } from 'react';
 import {
-  Avatar,
-  AvatarFallback,
-  AvatarImage,
-  Skeleton,
   Table,
   TableBody,
   TableCell,
   TableHead,
   TableHeader,
   TableRow,
+  TableSkeleton,
+  UserCell,
 } from '@/common/components';
-import { getUserImageUrl } from '@/common/config';
 import { useRoles } from '@/modules/system-roles';
-import { useUsers } from '../hooks/useUsers';
+import { useUsers } from '../hooks/queries';
 import { RolesDialog } from './roles-dialog';
 
 export const SystemUsersTable: FC = () => {
@@ -24,43 +20,7 @@ export const SystemUsersTable: FC = () => {
   const { isLoading: isLoadingRoles } = useRoles();
 
   if (isLoadingUsers && isLoadingRoles) {
-    return (
-      <div className='border rounded-lg overflow-hidden'>
-        <Table>
-          <TableHeader>
-            <TableRow>
-              <TableHead className='w-48'>
-                <Skeleton className='w-24 h-5 rounded-md' />
-              </TableHead>
-              <TableHead className='w-48'>
-                <Skeleton className='w-24 h-5 rounded-md' />
-              </TableHead>
-              <TableHead>
-                <Skeleton className='w-24 h-5 ml-auto rounded-md' />
-              </TableHead>
-            </TableRow>
-          </TableHeader>
-          <TableBody>
-            {Array.from({ length: 3 }).map((_, index) => (
-              <TableRow key={index}>
-                <TableCell>
-                  <div className='flex items-center gap-2'>
-                    <Skeleton className='size-8 rounded-full' />
-                    <Skeleton className='h-5 w-32 rounded-md' />
-                  </div>
-                </TableCell>
-                <TableCell>
-                  <Skeleton className='h-5 w-32 rounded-md' />
-                </TableCell>
-                <TableCell className='flex justify-end gap-2'>
-                  <Skeleton className='h-8 w-32 rounded-lg' />
-                </TableCell>
-              </TableRow>
-            ))}
-          </TableBody>
-        </Table>
-      </div>
-    );
+    return <TableSkeleton columns={3} withAvatar />;
   }
 
   return (
@@ -77,15 +37,7 @@ export const SystemUsersTable: FC = () => {
           {users?.map(user => (
             <TableRow key={user.id}>
               <TableCell>
-                <div className='flex items-center gap-3'>
-                  <Avatar>
-                    {user.imageUrl && <AvatarImage src={getUserImageUrl(user.imageUrl)} alt={`Аватар ${user.name}`} />}
-                    <AvatarFallback>
-                      <UserIcon className='size-4' />
-                    </AvatarFallback>
-                  </Avatar>
-                  <span>{user.name}</span>
-                </div>
+                <UserCell imageUrl={user.imageUrl} name={user.name} />
               </TableCell>
               <TableCell>
                 <span>{user.emailAddress}</span>

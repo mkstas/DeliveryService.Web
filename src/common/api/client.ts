@@ -60,3 +60,15 @@ export const http = async <T>(path: string, options: HttpOptions = {}): Promise<
 
   return (text ? JSON.parse(text) : undefined) as T;
 };
+
+export const httpOptional = async <T>(path: string, options: HttpOptions = {}): Promise<T | null> => {
+  try {
+    return await http<T>(path, options);
+  } catch (error) {
+    if (error instanceof HttpError && (error.status === 401 || error.status === 403)) {
+      return null;
+    }
+
+    throw error;
+  }
+};

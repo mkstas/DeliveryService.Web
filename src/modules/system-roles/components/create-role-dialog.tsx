@@ -1,34 +1,18 @@
 'use client';
 
-import { FC, useState } from 'react';
+import { type FC } from 'react';
 import { PlusIcon } from 'lucide-react';
-import {
-  Button,
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-} from '@/common/components';
-import { CreateRoleForm } from './create-role-form';
+import { FormDialog } from '@/common/forms';
+import { RoleForm } from './role-form';
 
 export const CreateRoleDialog: FC = () => {
-  const [open, setOpen] = useState(false);
-
   return (
-    <Dialog open={open} onOpenChange={setOpen}>
-      <DialogTrigger render={<Button />}>
-        <PlusIcon />
-        Создать роль
-      </DialogTrigger>
-      <DialogContent className='sm:max-w-md'>
-        <DialogHeader>
-          <DialogTitle>Создание роли</DialogTitle>
-          <DialogDescription>Укажите название новой роли</DialogDescription>
-        </DialogHeader>
-        <CreateRoleForm onSuccess={() => setOpen(false)} />
-      </DialogContent>
-    </Dialog>
+    <FormDialog
+      trigger={{ icon: PlusIcon, text: 'Создать роль' }}
+      title='Создание роли'
+      description='Укажите название новой роли'
+    >
+      {close => <RoleForm onSuccess={close} />}
+    </FormDialog>
   );
 };
