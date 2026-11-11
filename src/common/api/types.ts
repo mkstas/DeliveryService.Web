@@ -16,3 +16,8 @@ export type User = {
   imageUrl: string | null;
   roles: Role[];
 };
+
+export type Category = {
+  id: string;
+  name: string;
+};

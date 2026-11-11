@@ -6,4 +6,5 @@ export const queryKeys = {
     all: ['user_all'] as const,
   },
   establishments: ['establishments'] as const,
+  categories: ['categories'] as const,
 };
