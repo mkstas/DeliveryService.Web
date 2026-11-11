@@ -3,6 +3,7 @@
 import { type FC } from 'react';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow, TableSkeleton } from '@/common/components';
 import { useEstablishments } from '../hooks/queries';
+import { EstablishmentAddressesDialog } from './establishments-addresses-dialog';
 import { EstablishmentUsersDialog } from './establishments-users-dialog';
 import { UpdateEstablishmentDialog } from './update-establishment-dialog';
 
@@ -29,6 +30,7 @@ export const SystemEstablishmentsTable: FC = () => {
               <TableCell>{establishment.name}</TableCell>
               <TableCell>{establishment.businessAccount}</TableCell>
               <TableCell className='flex items-center justify-end gap-2'>
+                <EstablishmentAddressesDialog establishment={establishment} />
                 <EstablishmentUsersDialog establishment={establishment} />
                 <UpdateEstablishmentDialog establishment={establishment} />
               </TableCell>

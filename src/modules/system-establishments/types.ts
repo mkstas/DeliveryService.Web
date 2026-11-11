@@ -32,3 +32,13 @@ export type RemoveEstablishmentUserData = {
   establishmentId: string;
   userId: string;
 };
+
+export type AddEstablishmentAddressData = {
+  establishmentId: string;
+  address: string;
+};
+
+export type RemoveEstablishmentAddressData = {
+  establishmentId: string;
+  addressId: string;
+};

@@ -1,8 +1,10 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { http, queryKeys } from '@/common/api';
 import {
+  AddEstablishmentAddressData,
   AddEstablishmentUserData,
   CreateEstablishmentData,
+  RemoveEstablishmentAddressData,
   RemoveEstablishmentUserData,
   UpdateEstablishmentData,
 } from '../types';
@@ -47,6 +49,26 @@ export const useRemoveEstablishmentUser = () => {
   return useMutation({
     mutationFn: ({ establishmentId, userId }: RemoveEstablishmentUserData) =>
       http<void>(`establishments/${establishmentId}/users/${userId}`, { method: 'DELETE' }),
+    onSuccess: () => queryClient.invalidateQueries({ queryKey: queryKeys.establishments }),
+  });
+};
+
+export const useAddEstablishmentAddress = () => {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: (data: AddEstablishmentAddressData) =>
+      http<void>('establishments/addresses', { method: 'POST', body: data }),
+    onSuccess: () => queryClient.invalidateQueries({ queryKey: queryKeys.establishments }),
+  });
+};
+
+export const useRemoveEstablishmentAddress = () => {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: ({ establishmentId, addressId }: RemoveEstablishmentAddressData) =>
+      http<void>(`establishments/${establishmentId}/addresses/${addressId}`, { method: 'DELETE' }),
     onSuccess: () => queryClient.invalidateQueries({ queryKey: queryKeys.establishments }),
   });
 };
