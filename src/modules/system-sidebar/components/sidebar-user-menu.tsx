@@ -57,7 +57,7 @@ export const SidebarUserMenu: FC = () => {
             </Avatar>
             <div className='grid'>
               <span className='font-medium'>{user?.name}</span>
-              <span className='text-xs truncate'>{user?.emailAddress}</span>
+              <span className='truncate text-xs'>{user?.emailAddress}</span>
             </div>
             <ChevronsUpDownIcon className='ml-auto' />
           </DropdownMenuTrigger>

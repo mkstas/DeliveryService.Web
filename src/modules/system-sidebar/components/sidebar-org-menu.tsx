@@ -26,7 +26,7 @@ export const SidebarOrgMenu: FC = () => {
             <div className='flex aspect-square size-8 items-center justify-center rounded-full bg-sidebar-primary text-white'>
               <DonutIcon className='size-8' />
             </div>
-            <span className='font-medium truncate'>Доставички Inc</span>
+            <span className='truncate font-medium'>Доставички Inc</span>
             <ChevronsUpDownIcon className='ml-auto' />
           </DropdownMenuTrigger>
           <DropdownMenuContent className='max-w-56' side={isMobile ? 'bottom' : 'right'}>

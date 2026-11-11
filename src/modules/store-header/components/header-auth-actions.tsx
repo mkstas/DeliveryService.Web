@@ -12,13 +12,13 @@ export const HaderAuthActions: FC = () => {
   const { data: user, isLoading } = useUserMe();
 
   if (isLoading) {
-    return <Skeleton className='w-24 h-7 rounded-lg' />;
+    return <Skeleton className='h-7 w-24 rounded-lg' />;
   }
 
   if (!user) {
     return (
       <Link href={ROUTES.LOGIN} className={cn(buttonVariants({ variant: 'secondary', size: 'sm' }), 'pl-0')}>
-        <Avatar className='size-8 shrink-0 -ml-1'>
+        <Avatar className='-ml-1 size-8 shrink-0'>
           <AvatarFallback>
             <LogInIcon className='text-accent-foreground' />
           </AvatarFallback>
@@ -32,9 +32,9 @@ export const HaderAuthActions: FC = () => {
     <Link
       href={ROUTES.ACCOUNT}
       title={user.name}
-      className={cn(buttonVariants({ variant: 'secondary', size: 'sm' }), 'pl-0 max-w-32')}
+      className={cn(buttonVariants({ variant: 'secondary', size: 'sm' }), 'max-w-32 pl-0')}
     >
-      <Avatar className='size-8 shrink-0 -ml-1'>
+      <Avatar className='-ml-1 size-8 shrink-0'>
         {user?.imageUrl && <AvatarImage src={getUserImageUrl(user.imageUrl)} alt={`Аватар ${user.name}`} />}
         <AvatarFallback>
           <UserIcon />

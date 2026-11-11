@@ -32,7 +32,7 @@ export const PermissionsDialog: FC<PermissionsDialogProps> = ({ role }) => {
         onToggle={(permission, checked) =>
           togglePermission.mutate({ roleId: role.id, permissionId: permission.id, assign: checked })
         }
-        className='grid sm:grid-cols-2 gap-2'
+        className='grid gap-2 sm:grid-cols-2'
       />
       {togglePermission.isError && (
         <p className='text-sm text-destructive'>Не удалось изменить разрешение, попробуйте снова</p>

@@ -15,7 +15,7 @@ export const SystemRolesTable: FC = () => {
   }
 
   return (
-    <div className='border rounded-lg overflow-hidden'>
+    <div className='overflow-hidden rounded-lg border'>
       <Table>
         <TableHeader>
           <TableRow>
@@ -27,7 +27,7 @@ export const SystemRolesTable: FC = () => {
           {roles?.map(role => (
             <TableRow key={role.id}>
               <TableCell>{role.name}</TableCell>
-              <TableCell className='flex gap-2 justify-end'>
+              <TableCell className='flex justify-end gap-2'>
                 <PermissionsDialog role={role} />
                 <UpdateRoleDialog role={role} />
               </TableCell>

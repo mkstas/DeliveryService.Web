@@ -22,7 +22,7 @@ export const EstablishmentUsersDialog: FC<EstablishmentUsersDialogProps> = ({ es
     >
       <>
         <AddEstablishmentUserForm establishmentId={establishment.id} />
-        <div className='border rounded-lg overflow-hidden'>
+        <div className='overflow-hidden rounded-lg border'>
           <Table>
             <TableHeader>
               <TableRow>
@@ -40,7 +40,7 @@ export const EstablishmentUsersDialog: FC<EstablishmentUsersDialogProps> = ({ es
                   <TableCell>
                     <span>{user.emailAddress}</span>
                   </TableCell>
-                  <TableCell className='flex items-center gap-2 justify-end'>
+                  <TableCell className='flex items-center justify-end gap-2'>
                     <Button
                       variant='destructive'
                       onClick={() =>

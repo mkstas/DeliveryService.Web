@@ -14,7 +14,7 @@ export const SystemEstablishmentsTable: FC = () => {
   }
 
   return (
-    <div className='border rounded-lg overflow-hidden'>
+    <div className='overflow-hidden rounded-lg border'>
       <Table>
         <TableHeader>
           <TableRow>
@@ -28,7 +28,7 @@ export const SystemEstablishmentsTable: FC = () => {
             <TableRow key={establishment.id}>
               <TableCell>{establishment.name}</TableCell>
               <TableCell>{establishment.businessAccount}</TableCell>
-              <TableCell className='flex items-center gap-2 justify-end'>
+              <TableCell className='flex items-center justify-end gap-2'>
                 <EstablishmentUsersDialog establishment={establishment} />
                 <UpdateEstablishmentDialog establishment={establishment} />
               </TableCell>

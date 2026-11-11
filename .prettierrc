@@ -9,7 +9,8 @@
   "tabWidth": 2,
   "semi": true,
   "trailingComma": "all",
-  "plugins": ["prettier-plugin-tailwindcss", "@trivago/prettier-plugin-sort-imports"],
+  "plugins": ["@trivago/prettier-plugin-sort-imports", "prettier-plugin-tailwindcss"],
+  "tailwindStylesheet": "./src/app/globals.css",
   "importOrder": ["^react$", "^[a-zA-Z]", "^@[^/]+/.+$", "^@/common/(.*)$", "^@/modules/(.*)$", "^\\.\\./", "^\\./"],
   "importOrderSortSpecifiers": true,
   "importOrderCaseInsensitive": true

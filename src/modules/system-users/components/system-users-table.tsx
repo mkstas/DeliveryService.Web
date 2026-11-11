@@ -24,7 +24,7 @@ export const SystemUsersTable: FC = () => {
   }
 
   return (
-    <div className='border rounded-lg overflow-hidden'>
+    <div className='overflow-hidden rounded-lg border'>
       <Table>
         <TableHeader>
           <TableRow>
@@ -42,7 +42,7 @@ export const SystemUsersTable: FC = () => {
               <TableCell>
                 <span>{user.emailAddress}</span>
               </TableCell>
-              <TableCell className='flex items-center gap-2 justify-end'>
+              <TableCell className='flex items-center justify-end gap-2'>
                 <RolesDialog user={user} />
               </TableCell>
             </TableRow>

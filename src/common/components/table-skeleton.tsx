@@ -12,13 +12,13 @@ type TableSkeletonProps = {
 
 export const TableSkeleton: FC<TableSkeletonProps> = ({ columns, rows = 3, withAvatar = false }) => {
   return (
-    <div className='border rounded-lg overflow-hidden'>
+    <div className='overflow-hidden rounded-lg border'>
       <Table>
         <TableHeader>
           <TableRow>
             {Array.from({ length: columns }).map((_, index) => (
               <TableHead key={index} className={index < columns - 1 ? 'w-48' : undefined}>
-                <Skeleton className={index === columns - 1 ? 'w-24 h-5 ml-auto rounded-md' : 'w-24 h-5 rounded-md'} />
+                <Skeleton className={index === columns - 1 ? 'ml-auto h-5 w-24 rounded-md' : 'h-5 w-24 rounded-md'} />
               </TableHead>
             ))}
           </TableRow>
