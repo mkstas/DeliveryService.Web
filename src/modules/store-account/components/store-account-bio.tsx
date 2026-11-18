@@ -74,7 +74,6 @@ const AccountBioForm: FC<AccountBioFormProps> = ({ user, onSubmit }) => {
               <SubmitButton
                 form={form}
                 className='flex-1 sm:flex-none'
-                withSpinner
                 disabled={values => values.name.trim() === user.name}
               >
                 Сохранить

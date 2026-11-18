@@ -1,9 +1,8 @@
 import { API_HOST, API_URL } from './env';
 
 const absoluteUrlPattern = /^(?:[a-z][a-z\d+\-.]*:|\/\/)/i;
-const userImagePath = 'static/users';
 
-export const getUserImageUrl = (imageName: string | null | undefined): string | undefined => {
+const buildImageUrl = (imageName: string | null | undefined, imagePath: string): string | undefined => {
   if (!imageName) {
     return undefined;
   }
@@ -18,9 +17,18 @@ export const getUserImageUrl = (imageName: string | null | undefined): string | 
     return `${API_HOST.replace(/\/+$/, '')}/${normalizedImageName}`;
   }
 
-  if (normalizedImageName.startsWith(`${userImagePath}/`)) {
+  if (normalizedImageName.startsWith('static/')) {
     return `${API_URL.replace(/\/+$/, '')}/${normalizedImageName}`;
   }
 
-  return `${API_URL.replace(/\/+$/, '')}/${userImagePath}/${encodeURIComponent(normalizedImageName)}`;
+  return `${API_URL.replace(/\/+$/, '')}/${imagePath}/${encodeURIComponent(normalizedImageName)}`;
 };
+
+export const getUserImageUrl = (imageName: string | null | undefined): string | undefined =>
+  buildImageUrl(imageName, 'static/users');
+
+export const getRestaurantImageUrl = (imageName: string | null | undefined): string | undefined =>
+  buildImageUrl(imageName, 'static/restaurants');
+
+export const getDishImageUrl = (imageName: string | null | undefined): string | undefined =>
+  buildImageUrl(imageName, 'static/dishes');

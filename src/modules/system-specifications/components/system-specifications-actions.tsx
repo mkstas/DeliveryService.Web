@@ -1,24 +1,17 @@
 ﻿'use client';
 
-import { FC } from 'react';
-import { Skeleton } from '@/common/components';
+import { ActionsBar, CreateNamedEntityDialog } from '@/common/crud';
+import { useCreateSpecification } from '../hooks/mutations';
 import { useSpecifications } from '../hooks/queries';
-import { CreateSpecificationDialog } from './create-specification-dialog';
+import { specificationTexts } from '../texts';
 
-export const SystemSpecificationsActions: FC = () => {
+export const SystemSpecificationsActions = () => {
   const { isLoading } = useSpecifications();
-
-  if (isLoading) {
-    return (
-      <div className='flex justify-end gap-2'>
-        <Skeleton className='h-8 w-36 rounded-lg' />
-      </div>
-    );
-  }
+  const createSpecification = useCreateSpecification();
 
   return (
-    <div className='flex justify-end gap-2'>
-      <CreateSpecificationDialog />
-    </div>
+    <ActionsBar isLoading={isLoading}>
+      <CreateNamedEntityDialog texts={specificationTexts} onSave={name => createSpecification.mutateAsync({ name })} />
+    </ActionsBar>
   );
 };

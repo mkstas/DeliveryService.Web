@@ -1,37 +1,51 @@
 ﻿'use client';
 
-import { type FC } from 'react';
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow, TableSkeleton } from '@/common/components';
+import type { Category } from '@/common/api';
+import { type EntityColumn, EntityTable, RemoveDialog, UpdateNamedEntityDialog } from '@/common/crud';
+import { useDeleteCategory, useUpdateCategory } from '../hooks/mutations';
 import { useCategories } from '../hooks/queries';
-import { UpdateCategoryDialog } from './update-category-dialog';
+import { categoryTexts } from '../texts';
 
-export const SystemCategoriesTable: FC = () => {
+export const SystemCategoriesTable = () => {
   const { data: categories, isLoading } = useCategories();
+  const updateCategory = useUpdateCategory();
+  const deleteCategory = useDeleteCategory();
 
-  if (isLoading) {
-    return <TableSkeleton columns={2} />;
-  }
+  const columns: EntityColumn<Category>[] = [
+    {
+      header: 'Название',
+      className: 'w-48',
+      cell: category => category.name,
+    },
+    {
+      header: 'Действия',
+      className: 'text-right',
+      cellClassName: 'flex justify-end gap-2',
+      cell: category => (
+        <>
+          <UpdateNamedEntityDialog
+            entity={category}
+            texts={categoryTexts}
+            onSave={name => updateCategory.mutateAsync({ id: category.id, name })}
+          />
+          <RemoveDialog
+            title='Удаление категории'
+            description={`Категория «${category.name}» будет удалена`}
+            ariaLabel='Удалить категорию'
+            onConfirm={() => deleteCategory.mutateAsync(category.id)}
+          />
+        </>
+      ),
+    },
+  ];
 
   return (
-    <div className='overflow-hidden rounded-lg border'>
-      <Table>
-        <TableHeader>
-          <TableRow>
-            <TableHead className='w-48'>Название</TableHead>
-            <TableHead className='text-right'>Действия</TableHead>
-          </TableRow>
-        </TableHeader>
-        <TableBody>
-          {categories?.map(category => (
-            <TableRow key={category.id}>
-              <TableCell>{category.name}</TableCell>
-              <TableCell className='flex justify-end gap-2'>
-                <UpdateCategoryDialog category={category} />
-              </TableCell>
-            </TableRow>
-          ))}
-        </TableBody>
-      </Table>
-    </div>
+    <EntityTable
+      items={categories ?? []}
+      columns={columns}
+      getRowKey={category => category.id}
+      isLoading={isLoading}
+      emptyMessage='Категории не найдены'
+    />
   );
 };

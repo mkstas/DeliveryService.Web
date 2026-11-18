@@ -80,7 +80,7 @@ export const AuthLoginForm: FC<AuthLoginFormProps> = ({ defaultEmailAddress = ''
           autoComplete='current-password'
           placeholder='Введите пароль'
         />
-        <SubmitButton form={form} size='lg' className='w-full' withSpinner>
+        <SubmitButton form={form} size='lg' className='w-full'>
           Войти
         </SubmitButton>
       </FieldGroup>

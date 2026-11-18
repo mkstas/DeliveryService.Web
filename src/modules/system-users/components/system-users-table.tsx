@@ -1,54 +1,43 @@
 'use client';
 
-import { type FC } from 'react';
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-  TableSkeleton,
-  UserCell,
-} from '@/common/components';
+import type { User } from '@/common/api';
+import { UserCell } from '@/common/components';
+import { type EntityColumn, EntityTable } from '@/common/crud';
 import { useRoles } from '@/modules/system-roles';
 import { useUsers } from '../hooks/queries';
 import { RolesDialog } from './roles-dialog';
 
-export const SystemUsersTable: FC = () => {
+export const SystemUsersTable = () => {
   const { data: users, isLoading: isLoadingUsers } = useUsers();
   const { isLoading: isLoadingRoles } = useRoles();
 
-  if (isLoadingUsers && isLoadingRoles) {
-    return <TableSkeleton columns={3} withAvatar />;
-  }
+  const columns: EntityColumn<User>[] = [
+    {
+      header: 'Имя пользователя',
+      className: 'w-48',
+      cell: user => <UserCell imageUrl={user.imageUrl} name={user.name} />,
+    },
+    {
+      header: 'Электронная почта',
+      className: 'w-48',
+      cell: user => <span>{user.emailAddress}</span>,
+    },
+    {
+      header: 'Действия',
+      className: 'text-right',
+      cellClassName: 'flex items-center justify-end gap-2',
+      cell: user => <RolesDialog user={user} />,
+    },
+  ];
 
   return (
-    <div className='overflow-hidden rounded-lg border'>
-      <Table>
-        <TableHeader>
-          <TableRow>
-            <TableHead className='w-48'>Имя пользователя</TableHead>
-            <TableHead className='w-48'>Электронная почта</TableHead>
-            <TableHead className='text-right'>Действия</TableHead>
-          </TableRow>
-        </TableHeader>
-        <TableBody>
-          {users?.map(user => (
-            <TableRow key={user.id}>
-              <TableCell>
-                <UserCell imageUrl={user.imageUrl} name={user.name} />
-              </TableCell>
-              <TableCell>
-                <span>{user.emailAddress}</span>
-              </TableCell>
-              <TableCell className='flex items-center justify-end gap-2'>
-                <RolesDialog user={user} />
-              </TableCell>
-            </TableRow>
-          ))}
-        </TableBody>
-      </Table>
-    </div>
+    <EntityTable
+      items={users ?? []}
+      columns={columns}
+      getRowKey={user => user.id}
+      isLoading={isLoadingUsers || isLoadingRoles}
+      withAvatar
+      emptyMessage='Пользователи не найдены'
+    />
   );
 };

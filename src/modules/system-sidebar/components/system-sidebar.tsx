@@ -1,11 +1,10 @@
-import { FC } from 'react';
+import { type FC } from 'react';
 import {
+  ClipboardListIcon,
   ClipboardPenLineIcon,
   LayoutGridCirclesIcon,
-  LeafyGreenIcon,
   LucideIcon,
   MapPinIcon,
-  PlusCircleIcon,
   SoupIcon,
   UserShieldIcon,
   UsersIcon,
@@ -47,17 +46,19 @@ export const menuGroups: MenuGroup[] = [
   },
   {
     label: 'Партнеры',
-    items: [{ href: ROUTES.SYSTEM_ESTABLISHMENTS, label: 'Заведения', icon: MapPinIcon }],
+    items: [{ href: ROUTES.SYSTEM_RESTAURANTS, label: 'Рестораны', icon: MapPinIcon }],
   },
   {
     label: 'Продукты',
     items: [
       { href: ROUTES.SYSTEM_CATEGORIES, label: 'Категории', icon: LayoutGridCirclesIcon },
       { href: ROUTES.SYSTEM_SPECIFICATIONS, label: 'Характеристики', icon: ClipboardPenLineIcon },
-      { href: ROUTES.SYSTEM_INGREDIENTS, label: 'Ингредиенты', icon: LeafyGreenIcon },
-      { href: ROUTES.SYSTEM_MODIFIERS, label: 'Модификаторы', icon: PlusCircleIcon },
       { href: ROUTES.SYSTEM_DISHES, label: 'Блюда', icon: SoupIcon },
     ],
+  },
+  {
+    label: 'Заказы',
+    items: [{ href: ROUTES.SYSTEM_ORDERS, label: 'Заказы', icon: ClipboardListIcon }],
   },
 ];
 

@@ -1,25 +1,18 @@
 'use client';
 
-import { FC } from 'react';
-import { Skeleton } from '@/common/components';
+import { ActionsBar, CreateNamedEntityDialog } from '@/common/crud';
+import { useCreateRole } from '../hooks/mutations';
 import { usePermissions, useRoles } from '../hooks/queries';
-import { CreateRoleDialog } from './create-role-dialog';
+import { roleTexts } from '../texts';
 
-export const SystemRolesActions: FC = () => {
+export const SystemRolesActions = () => {
   const { isLoading: isLoadingRoles } = useRoles();
   const { isLoading: isLoadingPermissions } = usePermissions();
-
-  if (isLoadingRoles && isLoadingPermissions) {
-    return (
-      <div className='flex justify-end gap-2'>
-        <Skeleton className='h-8 w-36 rounded-lg' />
-      </div>
-    );
-  }
+  const createRole = useCreateRole();
 
   return (
-    <div className='flex justify-end gap-2'>
-      <CreateRoleDialog />
-    </div>
+    <ActionsBar isLoading={isLoadingRoles || isLoadingPermissions}>
+      <CreateNamedEntityDialog texts={roleTexts} onSave={name => createRole.mutateAsync({ name })} />
+    </ActionsBar>
   );
 };

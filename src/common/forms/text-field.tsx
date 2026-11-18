@@ -59,6 +59,7 @@ export const TextField = ({
               inputMode={inputMode}
               maxLength={maxLength}
               aria-invalid={isError}
+              aria-label={label ?? placeholder}
               placeholder={placeholder}
               value={field.state.value}
               onChange={e => field.handleChange(e.target.value)}

@@ -98,7 +98,7 @@ export const AuthConfirmForm: FC<AuthConfirmFormProps> = ({ emailAddress }) => {
     <FormShell form={form}>
       <FieldGroup>
         <CodeField form={form} name='code' label='Код из письма' />
-        <SubmitButton form={form} size='lg' className='w-full' withSpinner>
+        <SubmitButton form={form} size='lg' className='w-full'>
           Подтвердить
         </SubmitButton>
 

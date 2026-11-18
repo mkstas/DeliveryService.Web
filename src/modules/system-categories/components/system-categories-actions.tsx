@@ -1,24 +1,17 @@
 ﻿'use client';
 
-import { FC } from 'react';
-import { Skeleton } from '@/common/components';
+import { ActionsBar, CreateNamedEntityDialog } from '@/common/crud';
+import { useCreateCategory } from '../hooks/mutations';
 import { useCategories } from '../hooks/queries';
-import { CreateCategoryDialog } from './create-category-dialog';
+import { categoryTexts } from '../texts';
 
-export const SystemCategoriesActions: FC = () => {
+export const SystemCategoriesActions = () => {
   const { isLoading } = useCategories();
-
-  if (isLoading) {
-    return (
-      <div className='flex justify-end gap-2'>
-        <Skeleton className='h-8 w-36 rounded-lg' />
-      </div>
-    );
-  }
+  const createCategory = useCreateCategory();
 
   return (
-    <div className='flex justify-end gap-2'>
-      <CreateCategoryDialog />
-    </div>
+    <ActionsBar isLoading={isLoading}>
+      <CreateNamedEntityDialog texts={categoryTexts} onSave={name => createCategory.mutateAsync({ name })} />
+    </ActionsBar>
   );
 };
