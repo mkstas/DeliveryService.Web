@@ -1,40 +1,60 @@
 'use client';
 
-import { type FC } from 'react';
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow, TableSkeleton } from '@/common/components';
-import { usePermissions, useRoles } from '../hooks/queries';
+import type { Role } from '@/common/api';
+import { Badge } from '@/common/components';
+import { type EntityColumn, EntityTable, RemoveDialog, UpdateNamedEntityDialog } from '@/common/crud';
+import { useDeleteRole, useUpdateRole } from '../hooks/mutations';
+import { useRoles } from '../hooks/queries';
+import { roleTexts } from '../texts';
 import { PermissionsDialog } from './permissions-dialog';
-import { UpdateRoleDialog } from './update-role-dialog';
 
-export const SystemRolesTable: FC = () => {
-  const { data: roles, isLoading: isLoadingRoles } = useRoles();
-  const { isLoading: isLoadingPermissions } = usePermissions();
+export const SystemRolesTable = () => {
+  const { data: roles, isLoading } = useRoles();
+  const updateRole = useUpdateRole();
+  const deleteRole = useDeleteRole();
 
-  if (isLoadingRoles && isLoadingPermissions) {
-    return <TableSkeleton columns={2} />;
-  }
+  const columns: EntityColumn<Role>[] = [
+    {
+      header: 'Название',
+      className: 'w-48',
+      cell: role => (
+        <div className='flex items-center gap-2'>
+          <span>{role.name}</span>
+          {role.isBuiltIn && <Badge variant='secondary'>Встроенная</Badge>}
+        </div>
+      ),
+    },
+    {
+      header: 'Действия',
+      className: 'text-right',
+      cellClassName: 'flex justify-end gap-2',
+      cell: role =>
+        role.isBuiltIn ? null : (
+          <>
+            <PermissionsDialog role={role} />
+            <UpdateNamedEntityDialog
+              entity={role}
+              texts={roleTexts}
+              onSave={name => updateRole.mutateAsync({ id: role.id, name })}
+            />
+            <RemoveDialog
+              title='Удаление роли'
+              description={`Роль «${role.name}» будет удалена`}
+              ariaLabel='Удалить роль'
+              onConfirm={() => deleteRole.mutateAsync(role.id)}
+            />
+          </>
+        ),
+    },
+  ];
 
   return (
-    <div className='overflow-hidden rounded-lg border'>
-      <Table>
-        <TableHeader>
-          <TableRow>
-            <TableHead className='w-48'>Название</TableHead>
-            <TableHead className='text-right'>Действия</TableHead>
-          </TableRow>
-        </TableHeader>
-        <TableBody>
-          {roles?.map(role => (
-            <TableRow key={role.id}>
-              <TableCell>{role.name}</TableCell>
-              <TableCell className='flex justify-end gap-2'>
-                <PermissionsDialog role={role} />
-                <UpdateRoleDialog role={role} />
-              </TableCell>
-            </TableRow>
-          ))}
-        </TableBody>
-      </Table>
-    </div>
+    <EntityTable
+      items={roles ?? []}
+      columns={columns}
+      getRowKey={role => role.id}
+      isLoading={isLoading}
+      emptyMessage='Роли не найдены'
+    />
   );
 };

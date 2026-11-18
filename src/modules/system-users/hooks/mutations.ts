@@ -1,9 +1,18 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query';
-import { http, queryKeys } from '@/common/api';
-import { UserRoleData } from '../types';
+import { apiEndpoints, http, queryKeys } from '@/common/api';
+import { CreateUserData, UserRoleData } from '../types';
 
 type ToggleUserRoleData = UserRoleData & {
   assign: boolean;
+};
+
+export const useCreateUser = () => {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: (data: CreateUserData) => http<void>(apiEndpoints.users.all, { method: 'POST', body: data }),
+    onSuccess: () => queryClient.invalidateQueries({ queryKey: queryKeys.user.all }),
+  });
 };
 
 export const useToggleUserRole = () => {
@@ -12,8 +21,8 @@ export const useToggleUserRole = () => {
   return useMutation({
     mutationFn: ({ assign, ...data }: ToggleUserRoleData) =>
       assign
-        ? http<void>('users/roles', { method: 'POST', body: data })
-        : http<void>(`/users/${data.userId}/roles/${data.roleId}`, { method: 'DELETE' }),
+        ? http<void>(apiEndpoints.users.roles, { method: 'POST', body: data })
+        : http<void>(apiEndpoints.users.role(data.userId, data.roleId), { method: 'DELETE' }),
     onSuccess: () => queryClient.invalidateQueries({ queryKey: queryKeys.user.all }),
   });
 };

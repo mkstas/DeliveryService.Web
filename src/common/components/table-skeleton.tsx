@@ -1,6 +1,7 @@
 'use client';
 
 import { type FC } from 'react';
+import { cn } from 'cn';
 import { Skeleton } from '@/common/components/skeleton';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/common/components/table';
 
@@ -8,9 +9,10 @@ type TableSkeletonProps = {
   columns: number;
   rows?: number;
   withAvatar?: boolean;
+  avatarClassName?: string;
 };
 
-export const TableSkeleton: FC<TableSkeletonProps> = ({ columns, rows = 3, withAvatar = false }) => {
+export const TableSkeleton: FC<TableSkeletonProps> = ({ columns, rows = 3, withAvatar = false, avatarClassName }) => {
   return (
     <div className='overflow-hidden rounded-lg border'>
       <Table>
@@ -28,15 +30,15 @@ export const TableSkeleton: FC<TableSkeletonProps> = ({ columns, rows = 3, withA
             <TableRow key={rowIndex}>
               {Array.from({ length: columns }).map((_, colIndex) =>
                 colIndex === columns - 1 ? (
-                  <TableCell key={colIndex} className='flex justify-end gap-2'>
+                  <TableCell key={colIndex} className='flex items-center justify-end gap-2'>
                     <Skeleton className='h-8 w-32 rounded-lg' />
                     <Skeleton className='h-8 w-10 rounded-lg' />
                   </TableCell>
                 ) : (
                   <TableCell key={colIndex}>
                     {colIndex === 0 && withAvatar ? (
-                      <div className='flex items-center gap-2'>
-                        <Skeleton className='size-8 rounded-full' />
+                      <div className='flex items-center gap-3'>
+                        <Skeleton className={cn('size-8 rounded-full', avatarClassName)} />
                         <Skeleton className='h-5 w-32 rounded-md' />
                       </div>
                     ) : (

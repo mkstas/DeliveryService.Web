@@ -6,7 +6,18 @@ export type Permission = {
 export type Role = {
   id: string;
   name: string;
+  isBuiltIn: boolean;
   permissions: Permission[];
+};
+
+export type UserRole = {
+  id: string;
+  name: string;
+};
+
+export type Payment = {
+  id: string;
+  cardNumber: string;
 };
 
 export type User = {
@@ -14,7 +25,35 @@ export type User = {
   emailAddress: string;
   name: string;
   imageUrl: string | null;
-  roles: Role[];
+  roles: UserRole[];
+  payments: Payment[];
+};
+
+export type RestaurantAddress = {
+  id: string;
+  address: string;
+};
+
+export type RestaurantUser = {
+  id: string;
+  emailAddress: string;
+  name: string;
+  imageUrl: string | null;
+};
+
+export type Ingredient = {
+  id: string;
+  restaurantId: string;
+  name: string;
+};
+
+export type Restaurant = {
+  id: string;
+  name: string;
+  imageUrl: string | null;
+  addresses: RestaurantAddress[];
+  users: RestaurantUser[];
+  ingredients: Ingredient[];
 };
 
 export type Category = {
@@ -27,11 +66,41 @@ export type Specification = {
   name: string;
 };
 
-export type Ingredient = {
+export type DishSpecification = {
   id: string;
+  dishId: string;
+  specificationId: string;
+  value: string;
+};
+
+export type Dish = {
+  id: string;
+  restaurantId: string;
+  categoryId: string;
   name: string;
-  establishment: {
-    id: string;
-    name: string;
-  };
+  price: number;
+  description: string | null;
+  imageUrl: string | null;
+  specifications: DishSpecification[];
+};
+
+export type CartItem = {
+  id: string;
+  dishId: string;
+  quantity: number;
+};
+
+export type OrderDish = {
+  dishId: string;
+  quantity: number;
+};
+
+export type Order = {
+  id: string;
+  userId: string;
+  status: string;
+  address: string;
+  cost: number;
+  details: OrderDish[] | null;
+  comment: string | null;
 };

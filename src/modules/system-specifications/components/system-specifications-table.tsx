@@ -1,37 +1,51 @@
 ﻿'use client';
 
-import { type FC } from 'react';
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow, TableSkeleton } from '@/common/components';
+import type { Specification } from '@/common/api';
+import { type EntityColumn, EntityTable, RemoveDialog, UpdateNamedEntityDialog } from '@/common/crud';
+import { useDeleteSpecification, useUpdateSpecification } from '../hooks/mutations';
 import { useSpecifications } from '../hooks/queries';
-import { UpdateSpecificationDialog } from './update-specification-dialog';
+import { specificationTexts } from '../texts';
 
-export const SystemSpecificationsTable: FC = () => {
+export const SystemSpecificationsTable = () => {
   const { data: specifications, isLoading } = useSpecifications();
+  const updateSpecification = useUpdateSpecification();
+  const deleteSpecification = useDeleteSpecification();
 
-  if (isLoading) {
-    return <TableSkeleton columns={2} />;
-  }
+  const columns: EntityColumn<Specification>[] = [
+    {
+      header: 'Название',
+      className: 'w-48',
+      cell: specification => specification.name,
+    },
+    {
+      header: 'Действия',
+      className: 'text-right',
+      cellClassName: 'flex justify-end gap-2',
+      cell: specification => (
+        <>
+          <UpdateNamedEntityDialog
+            entity={specification}
+            texts={specificationTexts}
+            onSave={name => updateSpecification.mutateAsync({ id: specification.id, name })}
+          />
+          <RemoveDialog
+            title='Удаление характеристики'
+            description={`Характеристика «${specification.name}» будет удалена`}
+            ariaLabel='Удалить характеристику'
+            onConfirm={() => deleteSpecification.mutateAsync(specification.id)}
+          />
+        </>
+      ),
+    },
+  ];
 
   return (
-    <div className='overflow-hidden rounded-lg border'>
-      <Table>
-        <TableHeader>
-          <TableRow>
-            <TableHead className='w-48'>Название</TableHead>
-            <TableHead className='text-right'>Действия</TableHead>
-          </TableRow>
-        </TableHeader>
-        <TableBody>
-          {specifications?.map(specification => (
-            <TableRow key={specification.id}>
-              <TableCell>{specification.name}</TableCell>
-              <TableCell className='flex justify-end gap-2'>
-                <UpdateSpecificationDialog specification={specification} />
-              </TableCell>
-            </TableRow>
-          ))}
-        </TableBody>
-      </Table>
-    </div>
+    <EntityTable
+      items={specifications ?? []}
+      columns={columns}
+      getRowKey={specification => specification.id}
+      isLoading={isLoading}
+      emptyMessage='Характеристики не найдены'
+    />
   );
 };

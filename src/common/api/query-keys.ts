@@ -5,8 +5,11 @@ export const queryKeys = {
     me: ['user_me'] as const,
     all: ['user_all'] as const,
   },
-  establishments: ['establishments'] as const,
+  restaurants: ['restaurants'] as const,
   categories: ['categories'] as const,
   specifications: ['specifications'] as const,
-  ingredients: ['ingredients'] as const,
+  dishes: ['dishes'] as const,
+  dishSpecifications: ['dish_specifications'] as const,
+  orders: ['orders'] as const,
+  cartItems: ['cart_items'] as const,
 };

@@ -19,7 +19,7 @@ type SubmitButtonProps = {
 export const SubmitButton = ({
   form,
   disabled,
-  withSpinner = false,
+  withSpinner = true,
   className,
   variant,
   size,

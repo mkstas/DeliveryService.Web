@@ -1,5 +1,5 @@
 ﻿import { useMutation, useQueryClient } from '@tanstack/react-query';
-import { http, queryKeys } from '@/common/api';
+import { apiEndpoints, http, queryKeys } from '@/common/api';
 import { CreateSpecificationData, UpdateSpecificationData } from '../types';
 
 type UpdateSpecificationVariables = UpdateSpecificationData & {
@@ -10,7 +10,8 @@ export const useCreateSpecification = () => {
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationFn: (data: CreateSpecificationData) => http<void>('specifications', { method: 'POST', body: data }),
+    mutationFn: (data: CreateSpecificationData) =>
+      http<void>(apiEndpoints.specifications.all, { method: 'POST', body: data }),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: queryKeys.specifications });
     },
@@ -22,9 +23,21 @@ export const useUpdateSpecification = () => {
 
   return useMutation({
     mutationFn: ({ id, name }: UpdateSpecificationVariables) =>
-      http<void>(`specifications/${id}`, { method: 'PUT', body: { name } }),
+      http<void>(apiEndpoints.specifications.byId(id), { method: 'PUT', body: { name } }),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: queryKeys.specifications });
+    },
+  });
+};
+
+export const useDeleteSpecification = () => {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: (id: string) => http<void>(apiEndpoints.specifications.byId(id), { method: 'DELETE' }),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: queryKeys.specifications });
+      queryClient.invalidateQueries({ queryKey: queryKeys.dishSpecifications });
     },
   });
 };

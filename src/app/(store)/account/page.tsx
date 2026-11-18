@@ -1,5 +1,5 @@
 import { Card, CardContent, CardHeader, CardTitle } from '@/common/components';
-import { StoreAccountBio, StoreAccountEmail, StoreAccountProfile } from '@/modules/store-account';
+import { StoreAccountBio, StoreAccountProfile } from '@/modules/store-account';
 
 export default function AccountPage() {
   return (
@@ -15,9 +15,8 @@ export default function AccountPage() {
           <CardHeader className='border-b'>
             <CardTitle>Личные данные</CardTitle>
           </CardHeader>
-          <CardContent className='flex flex-col gap-6'>
+          <CardContent>
             <StoreAccountBio />
-            <StoreAccountEmail />
           </CardContent>
         </Card>
       </div>

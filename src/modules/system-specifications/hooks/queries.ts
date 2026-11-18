@@ -1,9 +1,9 @@
 ﻿import { useQuery } from '@tanstack/react-query';
-import { httpOptional, queryKeys, type Specification } from '@/common/api';
+import { apiEndpoints, httpOptional, queryKeys, type Specification } from '@/common/api';
 
 export const useSpecifications = () => {
   return useQuery({
     queryKey: queryKeys.specifications,
-    queryFn: () => httpOptional<Specification[]>('specifications'),
+    queryFn: () => httpOptional<Specification[]>(apiEndpoints.specifications.all),
   });
 };
