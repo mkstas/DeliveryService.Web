@@ -1,6 +1,6 @@
+import { AuthConfirmForm, AuthShell } from '@/screens/auth';
+import { ROUTES } from '@/shared/config';
 import { notFound } from 'next/navigation';
-import { ROUTES } from '@/common/config';
-import { AuthConfirmForm, AuthShell } from '@/modules/store-auth';
 
 type ConfirmPageProps = {
   searchParams: Promise<{ emailAddress?: string }>;

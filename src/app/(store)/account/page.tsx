@@ -1,5 +1,5 @@
-import { Card, CardContent, CardHeader, CardTitle } from '@/common/components';
-import { StoreAccountBio, StoreAccountProfile } from '@/modules/store-account';
+import { AccountBio, AccountProfile } from '@/screens/account';
+import { Card, CardContent, CardHeader, CardTitle } from '@/shared/ui';
 
 export default function AccountPage() {
   return (
@@ -7,7 +7,7 @@ export default function AccountPage() {
       <div className='grid items-start gap-6 lg:grid-cols-[minmax(0,18rem)_minmax(0,1fr)]'>
         <Card className='h-fit'>
           <CardContent>
-            <StoreAccountProfile />
+            <AccountProfile />
           </CardContent>
         </Card>
 
@@ -16,7 +16,7 @@ export default function AccountPage() {
             <CardTitle>Личные данные</CardTitle>
           </CardHeader>
           <CardContent>
-            <StoreAccountBio />
+            <AccountBio />
           </CardContent>
         </Card>
       </div>

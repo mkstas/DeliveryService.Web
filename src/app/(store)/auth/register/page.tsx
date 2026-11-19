@@ -1,5 +1,5 @@
-import { ROUTES } from '@/common/config';
-import { AuthRegisterForm, AuthShell } from '@/modules/store-auth';
+import { AuthRegisterForm, AuthShell } from '@/screens/auth';
+import { ROUTES } from '@/shared/config';
 
 export default function RegisterPage() {
   return (

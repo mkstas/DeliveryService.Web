@@ -1,0 +1,85 @@
+import { API_URL } from '@/shared/config';
+
+export class HttpError extends Error {
+  readonly status: number;
+  readonly serverMessage: string | undefined;
+
+  constructor(status: number, serverMessage?: string) {
+    super(serverMessage ?? `Request failed with status ${status}`);
+    this.name = 'HttpError';
+    this.status = status;
+    this.serverMessage = serverMessage;
+  }
+}
+
+type HttpOptions = Omit<RequestInit, 'body'> & {
+  body?: unknown;
+  query?: Record<string, string | number | boolean | undefined>;
+};
+
+const readErrorMessage = async (res: Response): Promise<string | undefined> => {
+  try {
+    const data = (await res.json()) as { message?: unknown };
+
+    if (typeof data.message === 'string') {
+      return data.message;
+    }
+
+    if (Array.isArray(data.message)) {
+      return data.message.filter((message): message is string => typeof message === 'string').join(', ');
+    }
+  } catch {
+    return undefined;
+  }
+
+  return undefined;
+};
+
+export const http = async <T>(path: string, options: HttpOptions = {}): Promise<T> => {
+  const { body, headers, query, ...rest } = options;
+  const isFormData = typeof FormData !== 'undefined' && body instanceof FormData;
+
+  const url = new URL(`${API_URL}/${path.replace(/^\/+/, '')}`);
+
+  if (query) {
+    for (const [key, value] of Object.entries(query)) {
+      if (value !== undefined) {
+        url.searchParams.set(key, String(value));
+      }
+    }
+  }
+
+  const res = await fetch(url.toString(), {
+    ...rest,
+    credentials: 'include',
+    ...(body !== undefined && { body: isFormData ? body : JSON.stringify(body) }),
+    headers: {
+      ...(body !== undefined && !isFormData && { 'Content-type': 'application/json; charset=UTF-8' }),
+      ...headers,
+    },
+  });
+
+  if (!res.ok) {
+    throw new HttpError(res.status, await readErrorMessage(res));
+  }
+
+  if (res.status === 204) {
+    return undefined as T;
+  }
+
+  const text = await res.text();
+
+  return (text ? JSON.parse(text) : undefined) as T;
+};
+
+export const httpOptional = async <T>(path: string, options: HttpOptions = {}): Promise<T | null> => {
+  try {
+    return await http<T>(path, options);
+  } catch (error) {
+    if (error instanceof HttpError && (error.status === 401 || error.status === 403)) {
+      return null;
+    }
+
+    throw error;
+  }
+};

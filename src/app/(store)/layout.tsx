@@ -1,4 +1,4 @@
-import { StoreHeader } from '@/modules/store-header';
+import { StoreHeader } from '@/widgets/store-header';
 
 export default function StoreLayout({ children }: LayoutProps<'/'>) {
   return (

@@ -1,7 +1,7 @@
+import { QueryProvider } from '@/shared/lib/providers';
+import { TooltipProvider } from '@/shared/ui';
 import { cn } from 'cn';
 import { Inter } from 'next/font/google';
-import { TooltipProvider } from '@/common/components';
-import { QueryProvider } from '@/common/providers';
 import './globals.css';
 
 const inter = Inter({ subsets: ['latin'], variable: '--font-sans' });

@@ -1,5 +1,5 @@
-import { ROUTES } from '@/common/config';
-import { AuthLoginForm, AuthShell } from '@/modules/store-auth';
+import { AuthLoginForm, AuthShell } from '@/screens/auth';
+import { ROUTES } from '@/shared/config';
 
 type AuthPageProps = {
   searchParams: Promise<{ emailAddress?: string }>;
