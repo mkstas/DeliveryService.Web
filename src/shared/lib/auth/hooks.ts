@@ -1,4 +1,5 @@
 import { apiEndpoints, http, httpOptional, queryKeys, type User } from '@/shared/api';
+import { ROUTES } from '@/shared/config';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 
 /**
@@ -32,6 +33,9 @@ export const useLogout = () => {
 
   return useMutation({
     mutationFn: () => http<void>(apiEndpoints.auth.logout, { method: 'DELETE' }),
-    onSuccess: () => queryClient.invalidateQueries({ queryKey: queryKeys.user.me }),
+    onSuccess: () => {
+      queryClient.setQueryData(queryKeys.user.me, null);
+      window.location.replace(ROUTES.STORE);
+    },
   });
 };

@@ -86,7 +86,14 @@ export const CreateDishForm: FC<CreateDishFormProps> = ({ onSuccess }) => {
           options={(categories ?? []).map(category => ({ value: category.id, label: category.name }))}
           placeholder='Выберите категорию'
         />
-        <TextField form={form} name='name' label='Название блюда' icon={SoupIcon} autoComplete='off' />
+        <TextField
+          form={form}
+          name='name'
+          label='Название блюда'
+          icon={SoupIcon}
+          placeholder='Название блюда'
+          autoComplete='off'
+        />
         <TextField
           form={form}
           name='price'
@@ -96,7 +103,7 @@ export const CreateDishForm: FC<CreateDishFormProps> = ({ onSuccess }) => {
           autoComplete='off'
           placeholder='0.00'
         />
-        <TextareaField form={form} name='description' label='Описание' maxLength={2048} />
+        <TextareaField form={form} name='description' label='Описание' placeholder='Описание блюда' maxLength={2048} />
         <SubmitButton form={form} className='w-full'>
           Создать блюдо
         </SubmitButton>

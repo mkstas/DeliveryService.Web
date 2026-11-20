@@ -2,7 +2,7 @@
 
 import { useLogout, useUserMe } from '@/screens/auth';
 import { HttpError } from '@/shared/api';
-import { getUserImageUrl, ROUTES } from '@/shared/config';
+import { getUserImageUrl } from '@/shared/config';
 import {
   Avatar,
   AvatarFallback,
@@ -17,7 +17,7 @@ import {
 import { ChangeEvent, FC, useState } from 'react';
 import { cn } from 'cn';
 import { CameraIcon, CircleAlertIcon, LoaderCircleIcon, LogOutIcon, UserIcon } from 'lucide-react';
-import { notFound, useRouter } from 'next/navigation';
+import { notFound } from 'next/navigation';
 import { useUploadUserImage } from '../hooks/mutations';
 
 const MAX_AVATAR_SIZE = 5 * 1024 * 1024;
@@ -32,7 +32,6 @@ const getAvatarUploadErrorMessage = (error: unknown): string => {
 };
 
 export const AccountProfile: FC = () => {
-  const router = useRouter();
   const logout = useLogout();
   const uploadAvatar = useUploadUserImage();
   const [avatarError, setAvatarError] = useState<string | null>(null);
@@ -72,11 +71,7 @@ export const AccountProfile: FC = () => {
     return notFound();
   }
 
-  const handleLogout = () => {
-    logout.mutate(undefined, {
-      onSuccess: () => router.replace(ROUTES.STORE),
-    });
-  };
+  const handleLogout = () => logout.mutate();
 
   const handleAvatarChange = (event: ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];

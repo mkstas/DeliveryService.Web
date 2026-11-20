@@ -64,7 +64,7 @@ export const menuGroups: MenuGroup[] = [
 
 export const SystemSidebar: FC = () => {
   return (
-    <Sidebar collapsible='icon'>
+    <Sidebar collapsible='icon' variant='inset'>
       <SidebarHeader>
         <SidebarOrgMenu />
       </SidebarHeader>

@@ -8,8 +8,8 @@ export default function SystemLayout({ children }: LayoutProps<'/'>) {
     <RouteGuard rule={systemAccessRule} section={ROUTES.SYSTEM}>
       <SidebarProvider>
         <SystemSidebar />
-        <SidebarInset>
-          <div className='sticky top-0 z-10 flex w-full items-center gap-2 border-b bg-background p-2'>
+        <SidebarInset className='overflow-hidden'>
+          <div className='flex w-full items-center gap-2 overflow-hidden border-b bg-background p-2'>
             <SidebarTrigger />
             <SystemBreadcrumb />
           </div>

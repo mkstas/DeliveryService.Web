@@ -52,7 +52,7 @@ export const DashboardSidebar: FC = () => {
   const { data: restaurant } = useMyRestaurant();
 
   return (
-    <Sidebar collapsible='icon'>
+    <Sidebar collapsible='icon' variant='inset'>
       <SidebarHeader>
         <SidebarOrgMenu title={restaurant?.name ?? 'Заведение'} />
       </SidebarHeader>

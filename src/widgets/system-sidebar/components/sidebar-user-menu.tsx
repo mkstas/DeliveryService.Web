@@ -20,10 +20,8 @@ import {
 import { FC } from 'react';
 import { ChevronsUpDownIcon, LogOutIcon, UserIcon } from 'lucide-react';
 import Link from 'next/link';
-import { useRouter } from 'next/navigation';
 
 export const SidebarUserMenu: FC = () => {
-  const router = useRouter();
   const { isMobile } = useSidebar();
   const { data: user, isLoading } = useUserMe();
   const logout = useLogout();
@@ -61,23 +59,13 @@ export const SidebarUserMenu: FC = () => {
             </div>
             <ChevronsUpDownIcon className='ml-auto' />
           </DropdownMenuTrigger>
-          <DropdownMenuContent
-            className='max-w-56'
-            side={isMobile ? 'top' : 'right'}
-            align={isMobile ? 'start' : 'end'}
-          >
+          <DropdownMenuContent className='w-56' side={isMobile ? 'top' : 'right'} align={isMobile ? 'start' : 'end'}>
             <DropdownMenuItem render={<Link href={ROUTES.ACCOUNT} />}>
               <UserIcon />
               Аккаунт
             </DropdownMenuItem>
             <DropdownMenuSeparator />
-            <DropdownMenuItem
-              onClick={() => {
-                logout.mutate(undefined, {
-                  onSuccess: () => router.push(ROUTES.STORE),
-                });
-              }}
-            >
+            <DropdownMenuItem onClick={() => logout.mutate()}>
               <LogOutIcon />
               Выйти из аккунта
             </DropdownMenuItem>

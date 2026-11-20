@@ -68,16 +68,24 @@ export const CreateUserForm: FC<CreateUserFormProps> = ({ onSuccess }) => {
   return (
     <FormShell form={form}>
       <FieldGroup>
-        <TextField form={form} name='name' label='Имя пользователя' icon={UserIcon} autoComplete='name' />
+        <TextField
+          form={form}
+          name='name'
+          label='Имя пользователя'
+          icon={UserIcon}
+          placeholder='Имя пользователя'
+          autoComplete='name'
+        />
         <TextField
           form={form}
           name='emailAddress'
           label='Электронная почта'
           icon={MailIcon}
           type='email'
+          placeholder='Электронная почта'
           autoComplete='email'
         />
-        <PasswordField form={form} name='password' label='Пароль' autoComplete='new-password' />
+        <PasswordField form={form} name='password' label='Пароль' placeholder='Пароль' autoComplete='new-password' />
         <SubmitButton form={form} className='w-full'>
           Создать пользователя
         </SubmitButton>

@@ -85,7 +85,7 @@ export function NamedEntityForm<T extends NamedEntity>({ entity, texts, onSave, 
   return (
     <FormShell form={form}>
       <FieldGroup>
-        <TextField form={form} name='name' label={label} icon={Icon} autoComplete='off' />
+        <TextField form={form} name='name' label={label} icon={Icon} placeholder={label} autoComplete='off' />
         <SubmitButton form={form} className='w-full'>
           {isEdit ? `Обновить ${entityName}` : `Создать ${entityName}`}
         </SubmitButton>

@@ -6,7 +6,7 @@ import { dashboardAccessRule, systemAccessRule } from '@/shared/lib/auth/route-g
 import { Avatar, AvatarFallback, AvatarImage, buttonVariants, Skeleton } from '@/shared/ui';
 import { FC } from 'react';
 import { cn } from 'cn';
-import { LayoutDashboardIcon, LogInIcon, ServerIcon, UserIcon } from 'lucide-react';
+import { LogInIcon, MonitorCogIcon, UserIcon } from 'lucide-react';
 import Link from 'next/link';
 
 export const HaderAuthActions: FC = () => {
@@ -36,13 +36,13 @@ export const HaderAuthActions: FC = () => {
     <div className='flex items-center gap-2'>
       {canOpenDashboard && (
         <Link href={ROUTES.DASHBOARD} className={cn(buttonVariants({ variant: 'secondary', size: 'sm' }))}>
-          <LayoutDashboardIcon />
+          <MonitorCogIcon />
           <span>Мой Ресторан</span>
         </Link>
       )}
       {canOpenSystem && (
         <Link href={ROUTES.SYSTEM} className={cn(buttonVariants({ variant: 'secondary', size: 'sm' }))}>
-          <ServerIcon />
+          <MonitorCogIcon />
           <span>Система</span>
         </Link>
       )}

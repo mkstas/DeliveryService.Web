@@ -115,7 +115,14 @@ export const DishForm: FC<DishFormProps> = ({ dish, onSuccess }) => {
             />
           </>
         )}
-        <TextField form={form} name='name' label='Название блюда' icon={SoupIcon} autoComplete='off' />
+        <TextField
+          form={form}
+          name='name'
+          label='Название блюда'
+          icon={SoupIcon}
+          placeholder='Название блюда'
+          autoComplete='off'
+        />
         <TextField
           form={form}
           name='price'
@@ -125,7 +132,7 @@ export const DishForm: FC<DishFormProps> = ({ dish, onSuccess }) => {
           autoComplete='off'
           placeholder='0.00'
         />
-        <TextareaField form={form} name='description' label='Описание' maxLength={2048} />
+        <TextareaField form={form} name='description' label='Описание' placeholder='Описание блюда' maxLength={2048} />
         <SubmitButton form={form} className='w-full'>
           {isEdit ? 'Обновить блюдо' : 'Создать блюдо'}
         </SubmitButton>

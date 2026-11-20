@@ -62,7 +62,7 @@ const UpdateAddressForm: FC<UpdateAddressFormProps> = ({ restaurantId, address, 
   return (
     <FormShell form={form}>
       <FieldGroup>
-        <TextField form={form} name='address' label='Адрес' autoComplete='off' />
+        <TextField form={form} name='address' label='Адрес' placeholder='Адрес ресторана' autoComplete='off' />
         <SubmitButton form={form} className='w-full'>
           Обновить адрес
         </SubmitButton>

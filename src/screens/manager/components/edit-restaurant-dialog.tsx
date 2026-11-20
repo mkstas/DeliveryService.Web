@@ -55,7 +55,14 @@ const EditRestaurantForm: FC<EditRestaurantFormProps> = ({ restaurant, onSuccess
 
   return (
     <FormShell form={form}>
-      <TextField form={form} name='name' label='Название заведения' icon={MapPinIcon} autoComplete='off' />
+      <TextField
+        form={form}
+        name='name'
+        label='Название заведения'
+        icon={MapPinIcon}
+        placeholder='Название заведения'
+        autoComplete='off'
+      />
       <div className='mt-3 flex justify-end'>
         <SubmitButton form={form}>Сохранить</SubmitButton>
       </div>

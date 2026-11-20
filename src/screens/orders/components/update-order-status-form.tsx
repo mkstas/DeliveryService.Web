@@ -53,7 +53,14 @@ export const UpdateOrderStatusForm: FC<UpdateOrderStatusFormProps> = ({ order, o
   return (
     <FormShell form={form}>
       <FieldGroup>
-        <SelectField form={form} name='status' label='Статус' icon={ClipboardListIcon} options={options} />
+        <SelectField
+          form={form}
+          name='status'
+          label='Статус'
+          icon={ClipboardListIcon}
+          options={options}
+          placeholder='Выберите статус'
+        />
         <SubmitButton form={form} className='w-full'>
           Изменить статус
         </SubmitButton>

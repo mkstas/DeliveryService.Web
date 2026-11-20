@@ -53,7 +53,7 @@ const UpdateSpecificationForm: FC<UpdateSpecificationFormProps> = ({ specificati
   return (
     <FormShell form={form}>
       <FieldGroup>
-        <TextField form={form} name='value' label='Значение' autoComplete='off' />
+        <TextField form={form} name='value' label='Значение' placeholder='Значение характеристики' autoComplete='off' />
         <SubmitButton form={form} className='w-full'>
           Обновить характеристику
         </SubmitButton>

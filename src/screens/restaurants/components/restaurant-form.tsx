@@ -73,7 +73,14 @@ export const RestaurantForm: FC<RestaurantFormProps> = ({ restaurant, onSuccess 
   return (
     <FormShell form={form}>
       <FieldGroup>
-        <TextField form={form} name='name' label='Название ресторана' icon={MapPinIcon} autoComplete='off' />
+        <TextField
+          form={form}
+          name='name'
+          label='Название ресторана'
+          icon={MapPinIcon}
+          placeholder='Название ресторана'
+          autoComplete='off'
+        />
         <SubmitButton form={form} className='w-full'>
           {isEdit ? 'Обновить ресторан' : 'Создать ресторан'}
         </SubmitButton>

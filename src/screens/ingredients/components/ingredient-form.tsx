@@ -123,7 +123,14 @@ export const IngredientForm: FC<IngredientFormProps> = ({ ingredient, onSuccess 
           }}
         </form.Field>
 
-        <TextField form={form} name='name' label='Название ингредиента' icon={LeafyGreenIcon} autoComplete='off' />
+        <TextField
+          form={form}
+          name='name'
+          label='Название ингредиента'
+          icon={LeafyGreenIcon}
+          placeholder='Название ингредиента'
+          autoComplete='off'
+        />
         <SubmitButton form={form} className='w-full'>
           {isEdit ? 'Обновить ингредиент' : 'Создать ингредиент'}
         </SubmitButton>
