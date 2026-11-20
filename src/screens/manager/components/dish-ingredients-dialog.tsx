@@ -75,9 +75,6 @@ const AddDishIngredientForm: FC<AddDishIngredientFormProps> = ({ dishId, usedIng
           </SubmitButton>
         </FieldGroup>
       </FormShell>
-      {!hasAvailableIngredients && (
-        <p className='text-sm text-muted-foreground'>Все ингредиенты заведения уже добавлены в блюдо.</p>
-      )}
     </div>
   );
 };

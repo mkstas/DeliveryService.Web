@@ -74,11 +74,6 @@ export const RestaurantInfoCard: FC<{ restaurant: Restaurant; dishCount: number 
             </Avatar>
             <div className='flex flex-col gap-1'>
               <CardTitle className='text-lg'>{restaurant.name}</CardTitle>
-              {restaurant.addresses.length > 0 && (
-                <span className='text-sm text-muted-foreground'>
-                  {restaurant.addresses.map(address => address.address).join(', ')}
-                </span>
-              )}
             </div>
           </div>
           <div className='flex items-center gap-2'>
