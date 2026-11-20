@@ -1,10 +1,11 @@
 'use client';
 
-import { type EntityColumn, EntityTable } from '@/features/crud';
+import { type EntityColumn, EntityTable, PaginationControls } from '@/features/crud';
 import { useUsers } from '@/screens/users';
 import type { Order } from '@/shared/api';
+import { useClampPage, useScreenPagination } from '@/shared/lib/hooks';
 import { Badge } from '@/shared/ui';
-import { useOrders } from '../hooks/queries';
+import { usePagedOrders } from '../hooks/queries';
 import { orderStatusLabels } from '../statuses';
 import { OrderDetails } from './order-details';
 import { UpdateOrderStatusDialog } from './update-order-status-dialog';
@@ -15,8 +16,11 @@ const costFormatter = new Intl.NumberFormat('ru-RU', {
 });
 
 export const OrdersTable = () => {
-  const { data: orders, isLoading } = useOrders();
+  const { page, setPage } = useScreenPagination();
+  const { data, isLoading } = usePagedOrders(page);
   const { data: users } = useUsers();
+
+  useClampPage(page, setPage, data?.totalPages ?? 0);
 
   const getUserLabel = (userId: string) => {
     const user = users?.find(user => user.id === userId);
@@ -64,12 +68,20 @@ export const OrdersTable = () => {
   ];
 
   return (
-    <EntityTable
-      items={orders ?? []}
-      columns={columns}
-      getRowKey={order => order.id}
-      isLoading={isLoading}
-      emptyMessage='Заказы не найдены'
-    />
+    <>
+      <EntityTable
+        items={data?.items ?? []}
+        columns={columns}
+        getRowKey={order => order.id}
+        isLoading={isLoading}
+        emptyMessage='Заказы не найдены'
+      />
+      <PaginationControls
+        page={page}
+        totalPages={data?.totalPages ?? 0}
+        totalCount={data?.totalCount}
+        onPageChange={setPage}
+      />
+    </>
   );
 };

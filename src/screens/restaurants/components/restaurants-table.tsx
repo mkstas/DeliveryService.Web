@@ -1,22 +1,26 @@
 'use client';
 
-import { type EntityColumn, EntityTable } from '@/features/crud';
+import { type EntityColumn, EntityTable, PaginationControls } from '@/features/crud';
 import { ImageUploadDialog } from '@/features/form';
 import type { Restaurant } from '@/shared/api';
 import { getRestaurantImageUrl } from '@/shared/config';
+import { useClampPage, useScreenPagination } from '@/shared/lib/hooks';
 import { Avatar, AvatarFallback, AvatarImage } from '@/shared/ui';
 import { ImageIcon } from 'lucide-react';
 import { useRemoveRestaurantImage, useUploadRestaurantImage } from '../hooks/mutations';
-import { useRestaurants } from '../hooks/queries';
+import { usePagedRestaurants } from '../hooks/queries';
 import { RestaurantAddressesDialog } from './restaurant-addresses-dialog';
 import { RestaurantIngredientsDialog } from './restaurant-ingredients-dialog';
 import { RestaurantManagersDialog } from './restaurant-managers-dialog';
 import { UpdateRestaurantDialog } from './update-restaurant-dialog';
 
 export const RestaurantsTable = ({ search }: { search?: string }) => {
-  const { data: restaurants, isLoading } = useRestaurants(search);
+  const { page, setPage } = useScreenPagination(search);
+  const { data, isLoading } = usePagedRestaurants(search, page);
   const uploadImage = useUploadRestaurantImage();
   const removeImage = useRemoveRestaurantImage();
+
+  useClampPage(page, setPage, data?.totalPages ?? 0);
 
   const columns: EntityColumn<Restaurant>[] = [
     {
@@ -64,14 +68,22 @@ export const RestaurantsTable = ({ search }: { search?: string }) => {
   ];
 
   return (
-    <EntityTable
-      items={restaurants ?? []}
-      columns={columns}
-      getRowKey={restaurant => restaurant.id}
-      isLoading={isLoading}
-      withAvatar
-      avatarClassName='rounded-md'
-      emptyMessage='Рестораны не найдены'
-    />
+    <>
+      <EntityTable
+        items={data?.items ?? []}
+        columns={columns}
+        getRowKey={restaurant => restaurant.id}
+        isLoading={isLoading}
+        withAvatar
+        avatarClassName='rounded-md'
+        emptyMessage='Рестораны не найдены'
+      />
+      <PaginationControls
+        page={page}
+        totalPages={data?.totalPages ?? 0}
+        totalCount={data?.totalCount}
+        onPageChange={setPage}
+      />
+    </>
   );
 };

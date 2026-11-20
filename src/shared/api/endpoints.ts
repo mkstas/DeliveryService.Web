@@ -8,6 +8,7 @@ export const apiEndpoints = {
   },
   users: {
     all: 'users',
+    paged: 'users/page',
     me: 'users/me',
     roles: 'users/roles',
     role: (userId: string, roleId: string) => `users/${userId}/roles/${roleId}`,
@@ -16,6 +17,7 @@ export const apiEndpoints = {
   },
   roles: {
     all: 'roles',
+    paged: 'roles/page',
     byId: (roleId: string) => `roles/${roleId}`,
     permissions: 'roles/permissions',
     permission: (roleId: string, permissionId: string) => `roles/${roleId}/permissions/${permissionId}`,
@@ -24,6 +26,7 @@ export const apiEndpoints = {
   myPermissions: 'permissions/me',
   restaurants: {
     all: 'restaurants',
+    paged: 'restaurants/page',
     byId: (restaurantId: string) => `restaurants/${restaurantId}`,
     me: 'restaurants/me',
     myAddresses: 'restaurants/me/addresses',
@@ -40,16 +43,20 @@ export const apiEndpoints = {
   },
   categories: {
     all: 'categories',
+    paged: 'categories/page',
     byId: (categoryId: string) => `categories/${categoryId}`,
   },
   specifications: {
     all: 'specifications',
+    paged: 'specifications/page',
     byId: (specificationId: string) => `specifications/${specificationId}`,
   },
   dishes: {
     all: 'dishes',
+    paged: 'dishes/page',
     byId: (dishId: string) => `dishes/${dishId}`,
     me: 'dishes/me',
+    pagedMe: 'dishes/me/page',
     ingredients: (dishId: string) => `dishes/${dishId}/ingredients`,
     ingredient: (dishId: string, dishIngredientId: string) => `dishes/${dishId}/ingredients/${dishIngredientId}`,
     myIngredients: (dishId: string) => `dishes/me/${dishId}/ingredients`,
@@ -67,9 +74,11 @@ export const apiEndpoints = {
   },
   orders: {
     all: 'orders',
+    paged: 'orders/page',
     byId: (orderId: string) => `orders/${orderId}`,
     status: (orderId: string) => `orders/${orderId}/status`,
     me: 'orders/me',
+    pagedMe: 'orders/me/page',
   },
   static: {
     users: 'static/users',

@@ -1,15 +1,19 @@
 'use client';
 
-import { type EntityColumn, EntityTable, RemoveDialog, UpdateNamedEntityDialog } from '@/features/crud';
+import { type EntityColumn, EntityTable, PaginationControls, RemoveDialog, UpdateNamedEntityDialog } from '@/features/crud';
 import type { Specification } from '@/shared/api';
+import { useClampPage, useScreenPagination } from '@/shared/lib/hooks';
 import { useDeleteSpecification, useUpdateSpecification } from '../hooks/mutations';
-import { useSpecifications } from '../hooks/queries';
+import { usePagedSpecifications } from '../hooks/queries';
 import { specificationTexts } from '../texts';
 
 export const SpecificationsTable = ({ search }: { search?: string }) => {
-  const { data: specifications, isLoading } = useSpecifications(search);
+  const { page, setPage } = useScreenPagination(search);
+  const { data, isLoading } = usePagedSpecifications(search, page);
   const updateSpecification = useUpdateSpecification();
   const deleteSpecification = useDeleteSpecification();
+
+  useClampPage(page, setPage, data?.totalPages ?? 0);
 
   const columns: EntityColumn<Specification>[] = [
     {
@@ -40,12 +44,20 @@ export const SpecificationsTable = ({ search }: { search?: string }) => {
   ];
 
   return (
-    <EntityTable
-      items={specifications ?? []}
-      columns={columns}
-      getRowKey={specification => specification.id}
-      isLoading={isLoading}
-      emptyMessage='Характеристики не найдены'
-    />
+    <>
+      <EntityTable
+        items={data?.items ?? []}
+        columns={columns}
+        getRowKey={specification => specification.id}
+        isLoading={isLoading}
+        emptyMessage='Характеристики не найдены'
+      />
+      <PaginationControls
+        page={page}
+        totalPages={data?.totalPages ?? 0}
+        totalCount={data?.totalCount}
+        onPageChange={setPage}
+      />
+    </>
   );
 };

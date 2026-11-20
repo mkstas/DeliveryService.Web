@@ -9,7 +9,7 @@ const isMissingOrForbidden = (error: unknown): boolean =>
  */
 export const httpManagerOptional = async <T>(
   path: string,
-  query?: Record<string, string | undefined>,
+  query?: Record<string, string | number | boolean | undefined>,
 ): Promise<T | null> => {
   try {
     return await http<T>(path, { query });

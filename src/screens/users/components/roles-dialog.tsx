@@ -23,6 +23,7 @@ export const RolesDialog: FC<RolesDialogProps> = ({ user }) => {
       triggerText='Роли'
       title='Роли пользователя'
       description={user.emailAddress}
+      cols={1}
       isPending={toggleRole.isPending}
       isError={toggleRole.isError}
       errorMessage='Не удалось изменить роли, попробуйте снова'

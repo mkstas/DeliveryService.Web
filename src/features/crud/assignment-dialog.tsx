@@ -14,6 +14,7 @@ type AssignmentDialogProps<T> = {
   triggerText: string;
   title: string;
   description?: ReactNode;
+  cols?: number;
   contentClassName?: string;
   isPending?: boolean;
   isError?: boolean;
@@ -30,6 +31,7 @@ export function AssignmentDialog<T>({
   triggerText,
   title,
   description,
+  cols = 2,
   contentClassName = 'sm:max-w-2xl w-full',
   isPending,
   isError,
@@ -52,7 +54,7 @@ export function AssignmentDialog<T>({
           selectedIds={selectedIds}
           disabled={isPending}
           onToggle={onToggle}
-          className='grid gap-2 sm:grid-cols-2'
+          className={`grid gap-2 sm:grid-cols-${cols}`}
         />
         {isError && <p className='text-sm text-destructive'>{errorMessage}</p>}
       </>

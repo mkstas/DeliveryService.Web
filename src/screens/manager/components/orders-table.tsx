@@ -1,15 +1,16 @@
 'use client';
 
-import { type EntityColumn, EntityTable } from '@/features/crud';
+import { type EntityColumn, EntityTable, PaginationControls } from '@/features/crud';
 import { ScreenHeader } from '@/screens/dashboard';
 import { OrderDetails } from '@/screens/orders/components/order-details';
 import { UpdateOrderStatusDialog } from '@/screens/orders/components/update-order-status-dialog';
 import { orderStatusLabels } from '@/screens/orders/statuses';
 import type { Order } from '@/shared/api';
+import { useClampPage, useScreenPagination } from '@/shared/lib/hooks';
 import { Badge } from '@/shared/ui';
 import { type FC } from 'react';
 import { ClipboardListIcon } from 'lucide-react';
-import { useMyRestaurantOrders } from '../hooks/queries';
+import { usePagedMyRestaurantOrders } from '../hooks/queries';
 
 const costFormatter = new Intl.NumberFormat('ru-RU', {
   minimumFractionDigits: 2,
@@ -17,7 +18,10 @@ const costFormatter = new Intl.NumberFormat('ru-RU', {
 });
 
 export const OrdersTable: FC = () => {
-  const { data: orders, isLoading } = useMyRestaurantOrders();
+  const { page, setPage } = useScreenPagination();
+  const { data, isLoading } = usePagedMyRestaurantOrders(page);
+
+  useClampPage(page, setPage, data?.totalPages ?? 0);
 
   const columns: EntityColumn<Order>[] = [
     {
@@ -53,11 +57,17 @@ export const OrdersTable: FC = () => {
       <ScreenHeader title='Заказы' icon={ClipboardListIcon} />
       <p className='text-sm text-muted-foreground'>Заказы, содержащие блюда вашего заведения.</p>
       <EntityTable
-        items={orders ?? []}
+        items={data?.items ?? []}
         columns={columns}
         getRowKey={order => order.id}
         isLoading={isLoading}
         emptyMessage='Заказы не найдены'
+      />
+      <PaginationControls
+        page={page}
+        totalPages={data?.totalPages ?? 0}
+        totalCount={data?.totalCount}
+        onPageChange={setPage}
       />
     </>
   );

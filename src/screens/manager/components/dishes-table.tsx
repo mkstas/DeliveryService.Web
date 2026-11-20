@@ -1,14 +1,15 @@
 'use client';
 
-import { type EntityColumn, EntityTable } from '@/features/crud';
+import { type EntityColumn, EntityTable, PaginationControls } from '@/features/crud';
 import { ImageUploadDialog } from '@/features/form';
 import { UpdateDishDialog } from '@/screens/dishes';
 import type { Dish } from '@/shared/api';
 import { getDishImageUrl } from '@/shared/config';
+import { useClampPage, useScreenPagination } from '@/shared/lib/hooks';
 import { Avatar, AvatarFallback, AvatarImage } from '@/shared/ui';
 import { ImageIcon } from 'lucide-react';
 import { useRemoveMyDishImage, useUploadMyDishImage } from '../hooks/mutations';
-import { useMyDishes } from '../hooks/queries';
+import { usePagedMyDishes } from '../hooks/queries';
 import { DishIngredientsDialog } from './dish-ingredients-dialog';
 import { DishSpecificationsDialog } from './dish-specifications-dialog';
 
@@ -17,9 +18,12 @@ type DishesTableProps = {
 };
 
 export const DishesTable = ({ search }: DishesTableProps) => {
-  const { data: dishes, isLoading } = useMyDishes(search);
+  const { page, setPage } = useScreenPagination(search);
+  const { data, isLoading } = usePagedMyDishes(search, page);
   const uploadImage = useUploadMyDishImage();
   const removeImage = useRemoveMyDishImage();
+
+  useClampPage(page, setPage, data?.totalPages ?? 0);
 
   const columns: EntityColumn<Dish>[] = [
     {
@@ -71,14 +75,22 @@ export const DishesTable = ({ search }: DishesTableProps) => {
   ];
 
   return (
-    <EntityTable
-      items={dishes ?? []}
-      columns={columns}
-      getRowKey={dish => dish.id}
-      isLoading={isLoading}
-      withAvatar
-      avatarClassName='rounded-md'
-      emptyMessage='Блюда не найдены'
-    />
+    <>
+      <EntityTable
+        items={data?.items ?? []}
+        columns={columns}
+        getRowKey={dish => dish.id}
+        isLoading={isLoading}
+        withAvatar
+        avatarClassName='rounded-md'
+        emptyMessage='Блюда не найдены'
+      />
+      <PaginationControls
+        page={page}
+        totalPages={data?.totalPages ?? 0}
+        totalCount={data?.totalCount}
+        onPageChange={setPage}
+      />
+    </>
   );
 };

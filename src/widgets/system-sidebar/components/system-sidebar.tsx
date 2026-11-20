@@ -16,8 +16,8 @@ import {
   ClipboardPenLineIcon,
   LayoutGridCirclesIcon,
   LucideIcon,
-  MapPinIcon,
   SoupIcon,
+  StoreIcon,
   UserShieldIcon,
   UsersIcon,
 } from 'lucide-react';
@@ -46,7 +46,7 @@ export const menuGroups: MenuGroup[] = [
   },
   {
     label: 'Партнеры',
-    items: [{ href: ROUTES.SYSTEM_RESTAURANTS, label: 'Рестораны', icon: MapPinIcon }],
+    items: [{ href: ROUTES.SYSTEM_RESTAURANTS, label: 'Рестораны', icon: StoreIcon }],
   },
   {
     label: 'Продукты',

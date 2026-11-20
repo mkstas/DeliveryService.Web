@@ -1,17 +1,21 @@
 'use client';
 
-import { type EntityColumn, EntityTable, RemoveDialog, UpdateNamedEntityDialog } from '@/features/crud';
+import { type EntityColumn, EntityTable, PaginationControls, RemoveDialog, UpdateNamedEntityDialog } from '@/features/crud';
 import type { Role } from '@/shared/api';
+import { useClampPage, useScreenPagination } from '@/shared/lib/hooks';
 import { Badge } from '@/shared/ui';
 import { useDeleteRole, useUpdateRole } from '../hooks/mutations';
-import { useRoles } from '../hooks/queries';
+import { usePagedRoles } from '../hooks/queries';
 import { roleTexts } from '../texts';
 import { PermissionsDialog } from './permissions-dialog';
 
 export const RolesTable = () => {
-  const { data: roles, isLoading } = useRoles();
+  const { page, setPage } = useScreenPagination();
+  const { data, isLoading } = usePagedRoles(page);
   const updateRole = useUpdateRole();
   const deleteRole = useDeleteRole();
+
+  useClampPage(page, setPage, data?.totalPages ?? 0);
 
   const columns: EntityColumn<Role>[] = [
     {
@@ -49,12 +53,20 @@ export const RolesTable = () => {
   ];
 
   return (
-    <EntityTable
-      items={roles ?? []}
-      columns={columns}
-      getRowKey={role => role.id}
-      isLoading={isLoading}
-      emptyMessage='Роли не найдены'
-    />
+    <>
+      <EntityTable
+        items={data?.items ?? []}
+        columns={columns}
+        getRowKey={role => role.id}
+        isLoading={isLoading}
+        emptyMessage='Роли не найдены'
+      />
+      <PaginationControls
+        page={page}
+        totalPages={data?.totalPages ?? 0}
+        totalCount={data?.totalCount}
+        onPageChange={setPage}
+      />
+    </>
   );
 };

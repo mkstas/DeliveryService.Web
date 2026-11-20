@@ -1,3 +1,11 @@
+export type PagedResult<T> = {
+  items: T[];
+  page: number;
+  pageSize: number;
+  totalCount: number;
+  totalPages: number;
+};
+
 export type Permission = {
   id: string;
   displayName: string;

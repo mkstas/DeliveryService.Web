@@ -1,26 +1,30 @@
 'use client';
 
-import { type EntityColumn, EntityTable, RemoveDialog } from '@/features/crud';
+import { type EntityColumn, EntityTable, PaginationControls, RemoveDialog } from '@/features/crud';
 import { ImageUploadDialog } from '@/features/form';
 import { useCategories } from '@/screens/categories';
 import { useRestaurants } from '@/screens/restaurants';
 import type { Dish } from '@/shared/api';
 import { getDishImageUrl } from '@/shared/config';
+import { useClampPage, useScreenPagination } from '@/shared/lib/hooks';
 import { Avatar, AvatarFallback, AvatarImage } from '@/shared/ui';
 import { ImageIcon } from 'lucide-react';
 import { useDeleteDish, useRemoveDishImage, useUploadDishImage } from '../hooks/mutations';
-import { useDishes } from '../hooks/queries';
+import { usePagedDishes } from '../hooks/queries';
 import { DishIngredientsDialog } from './dish-ingredients-dialog';
 import { DishSpecificationsDialog } from './dish-specifications-dialog';
 import { UpdateDishDialog } from './update-dish-dialog';
 
 export const DishesTable = ({ search }: { search?: string }) => {
-  const { data: dishes, isLoading } = useDishes(search);
+  const { page, setPage } = useScreenPagination(search);
+  const { data, isLoading } = usePagedDishes(search, page);
   const { data: restaurants } = useRestaurants();
   const { data: categories } = useCategories();
   const deleteDish = useDeleteDish();
   const uploadImage = useUploadDishImage();
   const removeImage = useRemoveDishImage();
+
+  useClampPage(page, setPage, data?.totalPages ?? 0);
 
   const getRestaurantName = (restaurantId: string) =>
     restaurants?.find(restaurant => restaurant.id === restaurantId)?.name ?? '—';
@@ -89,14 +93,22 @@ export const DishesTable = ({ search }: { search?: string }) => {
   ];
 
   return (
-    <EntityTable
-      items={dishes ?? []}
-      columns={columns}
-      getRowKey={dish => dish.id}
-      isLoading={isLoading}
-      withAvatar
-      avatarClassName='rounded-md'
-      emptyMessage='Блюда не найдены'
-    />
+    <>
+      <EntityTable
+        items={data?.items ?? []}
+        columns={columns}
+        getRowKey={dish => dish.id}
+        isLoading={isLoading}
+        withAvatar
+        avatarClassName='rounded-md'
+        emptyMessage='Блюда не найдены'
+      />
+      <PaginationControls
+        page={page}
+        totalPages={data?.totalPages ?? 0}
+        totalCount={data?.totalCount}
+        onPageChange={setPage}
+      />
+    </>
   );
 };

@@ -1,15 +1,19 @@
 'use client';
 
-import { type EntityColumn, EntityTable } from '@/features/crud';
+import { type EntityColumn, EntityTable, PaginationControls } from '@/features/crud';
 import { useRoles } from '@/screens/roles';
 import type { User } from '@/shared/api';
+import { useClampPage, useScreenPagination } from '@/shared/lib/hooks';
 import { UserCell } from '@/shared/ui';
-import { useUsers } from '../hooks/queries';
+import { usePagedUsers } from '../hooks/queries';
 import { RolesDialog } from './roles-dialog';
 
 export const UsersTable = ({ search }: { search?: string }) => {
-  const { data: users, isLoading: isLoadingUsers } = useUsers(search);
+  const { page, setPage } = useScreenPagination(search);
+  const { data, isLoading: isLoadingUsers } = usePagedUsers(search, page);
   const { isLoading: isLoadingRoles } = useRoles();
+
+  useClampPage(page, setPage, data?.totalPages ?? 0);
 
   const columns: EntityColumn<User>[] = [
     {
@@ -31,13 +35,21 @@ export const UsersTable = ({ search }: { search?: string }) => {
   ];
 
   return (
-    <EntityTable
-      items={users ?? []}
-      columns={columns}
-      getRowKey={user => user.id}
-      isLoading={isLoadingUsers || isLoadingRoles}
-      withAvatar
-      emptyMessage='Пользователи не найдены'
-    />
+    <>
+      <EntityTable
+        items={data?.items ?? []}
+        columns={columns}
+        getRowKey={user => user.id}
+        isLoading={isLoadingUsers || isLoadingRoles}
+        withAvatar
+        emptyMessage='Пользователи не найдены'
+      />
+      <PaginationControls
+        page={page}
+        totalPages={data?.totalPages ?? 0}
+        totalCount={data?.totalCount}
+        onPageChange={setPage}
+      />
+    </>
   );
 };
